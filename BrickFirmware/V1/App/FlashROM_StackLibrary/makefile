@@ -10,6 +10,7 @@ GEN_OPTS__FLAG := --cmd_file="configPkg/compiler.opt"
 GEN_CMDS__FLAG := -l"configPkg/linker.cmd" 
 
 ORDERED_OBJS += \
+"./Application/Drivers/WS2812Driver.obj" \
 "./Application/simple_peripheral.obj" \
 "./Application/util.obj" \
 "./Drivers/ECC/ECCROMCC26XX.obj" \
@@ -19,10 +20,10 @@ ORDERED_OBJS += \
 "./ICall/icall_user_config.obj" \
 "./ICallBLE/ble_user_config.obj" \
 "./ICallBLE/icall_api_lite.obj" \
+"./PROFILES/DataStreamerService.obj" \
 "./PROFILES/devinfoservice.obj" \
 "./PROFILES/gatt_uuid.obj" \
 "./PROFILES/gattservapp_util.obj" \
-"./PROFILES/simple_gatt_profile.obj" \
 "./Startup/board.obj" \
 "./Startup/ccfg_app_ble.obj" \
 "./Startup/main.obj" \
@@ -46,6 +47,7 @@ RMDIR := RMDIR /S/Q
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Application/Drivers/subdir_vars.mk
 -include Application/subdir_vars.mk
 -include Drivers/ECC/subdir_vars.mk
 -include Drivers/TRNG/subdir_vars.mk
@@ -55,6 +57,7 @@ RMDIR := RMDIR /S/Q
 -include Startup/subdir_vars.mk
 -include TOOLS/subdir_vars.mk
 -include TOOLS/defines/subdir_vars.mk
+-include Application/Drivers/subdir_rules.mk
 -include Application/subdir_rules.mk
 -include Drivers/ECC/subdir_rules.mk
 -include Drivers/TRNG/subdir_rules.mk
@@ -177,7 +180,7 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@$(MAKE) --no-print-directory -Onone "ble5_simple_peripheral_cc2640r2lp_app.out"
 
 dependents:
-	-cd F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library && $(MAKE) clean all
+	-cd F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library && $(MAKE) all
 
 # Tool invocations
 ble5_simple_peripheral_cc2640r2lp_app.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library/ble5_simple_peripheral_cc2640r2lp_stack_library.lib
@@ -199,8 +202,8 @@ ble5_simple_peripheral_cc2640r2lp_app.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Application\simple_peripheral.obj" "Application\util.obj" "Drivers\ECC\ECCROMCC26XX.obj" "Drivers\TRNG\TRNGCC26XX.obj" "ICall\icall.obj" "ICall\icall_cc2650.obj" "ICall\icall_user_config.obj" "ICallBLE\ble_user_config.obj" "ICallBLE\icall_api_lite.obj" "PROFILES\devinfoservice.obj" "PROFILES\gatt_uuid.obj" "PROFILES\gattservapp_util.obj" "PROFILES\simple_gatt_profile.obj" "Startup\board.obj" "Startup\ccfg_app_ble.obj" "Startup\main.obj" 
-	-$(RM) "Application\simple_peripheral.d" "Application\util.d" "Drivers\ECC\ECCROMCC26XX.d" "Drivers\TRNG\TRNGCC26XX.d" "ICall\icall.d" "ICall\icall_cc2650.d" "ICall\icall_user_config.d" "ICallBLE\ble_user_config.d" "ICallBLE\icall_api_lite.d" "PROFILES\devinfoservice.d" "PROFILES\gatt_uuid.d" "PROFILES\gattservapp_util.d" "PROFILES\simple_gatt_profile.d" "Startup\board.d" "Startup\ccfg_app_ble.d" "Startup\main.d" 
+	-$(RM) "Application\Drivers\WS2812Driver.obj" "Application\simple_peripheral.obj" "Application\util.obj" "Drivers\ECC\ECCROMCC26XX.obj" "Drivers\TRNG\TRNGCC26XX.obj" "ICall\icall.obj" "ICall\icall_cc2650.obj" "ICall\icall_user_config.obj" "ICallBLE\ble_user_config.obj" "ICallBLE\icall_api_lite.obj" "PROFILES\DataStreamerService.obj" "PROFILES\devinfoservice.obj" "PROFILES\gatt_uuid.obj" "PROFILES\gattservapp_util.obj" "Startup\board.obj" "Startup\ccfg_app_ble.obj" "Startup\main.obj" 
+	-$(RM) "Application\Drivers\WS2812Driver.d" "Application\simple_peripheral.d" "Application\util.d" "Drivers\ECC\ECCROMCC26XX.d" "Drivers\TRNG\TRNGCC26XX.d" "ICall\icall.d" "ICall\icall_cc2650.d" "ICall\icall_user_config.d" "ICallBLE\ble_user_config.d" "ICallBLE\icall_api_lite.d" "PROFILES\DataStreamerService.d" "PROFILES\devinfoservice.d" "PROFILES\gatt_uuid.d" "PROFILES\gattservapp_util.d" "Startup\board.d" "Startup\ccfg_app_ble.d" "Startup\main.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
 	-@echo 'Finished clean'
 	-@echo ' '

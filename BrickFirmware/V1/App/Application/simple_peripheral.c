@@ -72,7 +72,7 @@
 #include <icall_ble_api.h>
 
 #include <devinfoservice.h>
-#include <simple_gatt_profile.h>
+#include <DataStreamerService.h>
 
 #ifdef USE_RCOSC
 #include <rcosc_calibration.h>
@@ -166,15 +166,7 @@ Display_Handle dispHandle;
 #define SP_ROW_DEBUG         (TBM_ROW_APP + 8)
 
 // For storing the active connections
-#define SP_RSSI_TRACK_CHNLS        1            // Max possible channels can be GAP_BONDINGS_MAX
 #define SP_MAX_RSSI_STORE_DEPTH    5
-#define SP_INVALID_HANDLE          0xFFFF
-#define RSSI_2M_THRSHLD           -30
-#define RSSI_1M_THRSHLD           -40
-#define RSSI_S2_THRSHLD           -50
-#define RSSI_S8_THRSHLD           -60
-#define SP_PHY_NONE                LL_PHY_NONE  // No PHY set
-#define AUTO_PHY_UPDATE            0xFF
 
 // Spin if the expression is not true
 #define SIMPLEPERIPHERAL_ASSERT(expr) if (!(expr)) simple_peripheral_spin();
@@ -384,7 +376,6 @@ static void SimplePeripheral_advCallback(uint32_t event, void *pBuf, uintptr_t a
 static void SimplePeripheral_processAdvEvent(spGapAdvEventData_t *pEventData);
 static void SimplePeripheral_processAppMsg(spEvt_t *pMsg);
 static void SimplePeripheral_processCharValueChangeEvt(uint8_t paramId);
-static void SimplePeripheral_performPeriodicTask(void);
 
 static void SimplePeripheral_clockHandler(UArg arg);
 
@@ -498,32 +489,10 @@ static void SimplePeripheral_init(void)
 
 
   // Initialize GATT attributes
-  GGS_AddService(GATT_ALL_SERVICES);           // GAP GATT Service
-  GATTServApp_AddService(GATT_ALL_SERVICES);   // GATT Service
-  DevInfo_AddService();                        // Device Information Service
+  //GGS_AddService(GATT_ALL_SERVICES);           // GAP GATT Service
+  //GATTServApp_AddService(GATT_ALL_SERVICES);   // GATT Service
+  //DevInfo_AddService();                        // Device Information Service
   SimpleProfile_AddService(GATT_ALL_SERVICES); // Simple GATT Profile
-
-  // Setup the SimpleProfile Characteristic Values
-  // For more information, see the GATT and GATTServApp sections in the User's Guide:
-  // http://software-dl.ti.com/lprf/ble5stack-latest/
-  {
-    uint8_t charValue1 = 1;
-    uint8_t charValue2 = 2;
-    uint8_t charValue3 = 3;
-    uint8_t charValue4 = 4;
-    uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
-
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
-                               &charValue1);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
-                               &charValue2);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
-                               &charValue3);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                               &charValue4);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
-                               charValue5);
-  }
 
   // Register callback with SimpleGATTprofile
   SimpleProfile_RegisterAppCBs(&SimplePeripheral_simpleProfileCBs);
@@ -781,11 +750,6 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
       SimplePeripheral_processPasscode((spPasscodeData_t*)(pMsg->pData));
       break;
 
-    case SP_PERIODIC_EVT:
-      SimplePeripheral_performPeriodicTask();
-      break;
-
-
 
     case SP_SEND_PARAM_UPDATE_EVT:
     {
@@ -889,33 +853,7 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
         status = GapAdv_enable(advHandleLegacy, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
         SIMPLEPERIPHERAL_ASSERT(status == SUCCESS);
 
-        // Use long range params to create long range set #2
-        GapAdv_params_t advParamLongRange = GAPADV_PARAMS_AE_LONG_RANGE_CONN;
 
-        // Create Advertisement set #2 and assign handle
-        status = GapAdv_create(&SimplePeripheral_advCallback, &advParamLongRange,
-                               &advHandleLongRange);
-        SIMPLEPERIPHERAL_ASSERT(status == SUCCESS);
-
-        // Load advertising data for set #2 that is statically allocated by the app
-        status = GapAdv_loadByHandle(advHandleLongRange, GAP_ADV_DATA_TYPE_ADV,
-                                     sizeof(advertData), advertData);
-        SIMPLEPERIPHERAL_ASSERT(status == SUCCESS);
-
-        // Set event mask for set #2
-        status = GapAdv_setEventMask(advHandleLongRange,
-                                     GAP_ADV_EVT_MASK_START_AFTER_ENABLE |
-                                     GAP_ADV_EVT_MASK_END_AFTER_DISABLE |
-                                     GAP_ADV_EVT_MASK_SET_TERMINATED);
-
-        // Enable long range advertising for set #2
-        status = GapAdv_enable(advHandleLongRange, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
-        SIMPLEPERIPHERAL_ASSERT(status == SUCCESS);
-
-#ifdef PTM_MODE
-         // Enable "Enable PTM Mode" option
-         tbm_setItemStatus(&spMenuMain, SP_ITEM_PTM_ENBL, SP_ITEM_NONE);
-#endif
         // Display device address
         Display_printf(dispHandle, SP_ROW_IDA, 0, "%s Addr: %s",
                        (addrMode <= ADDRMODE_RANDOM) ? "Dev" : "ID",
@@ -1116,46 +1054,12 @@ static void SimplePeripheral_processCharValueChangeEvt(uint8_t paramId)
       Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Char 1: %d", (uint16_t)newValue);
       break;
 
-    case SIMPLEPROFILE_CHAR3:
-      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &newValue);
-
-      Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Char 3: %d", (uint16_t)newValue);
-      break;
-
     default:
       // should not reach here!
       break;
   }
 }
 
-/*********************************************************************
- * @fn      SimplePeripheral_performPeriodicTask
- *
- * @brief   Perform a periodic application task. This function gets called
- *          every five seconds (SP_PERIODIC_EVT_PERIOD). In this example,
- *          the value of the third characteristic in the SimpleGATTProfile
- *          service is retrieved from the profile, and then copied into the
- *          value of the the fourth characteristic.
- *
- * @param   None.
- *
- * @return  None.
- */
-static void SimplePeripheral_performPeriodicTask(void)
-{
-  uint8_t valueToCopy;
-
-  // Call to retrieve the value of the third characteristic in the profile
-  if (SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &valueToCopy) == SUCCESS)
-  {
-    // Call to set that value of the fourth characteristic in the profile.
-    // Note that if notifications of the fourth characteristic have been
-    // enabled by a GATT client device, then a notification will be sent
-    // every time this function is called.
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                               &valueToCopy);
-  }
-}
 
 
 /*********************************************************************

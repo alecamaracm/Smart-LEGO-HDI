@@ -261,7 +261,7 @@ Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/sour
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/TRNGCC26XX.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_api_idx.h
 Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/devinfoservice.h
-Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/simple_gatt_profile.h
+Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/DataStreamerService.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/target/board.h
 
 ../Application/simple_peripheral.c: 
@@ -525,5 +525,5 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/map_dire
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/TRNGCC26XX.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_api_idx.h: 
 F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/devinfoservice.h: 
-F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/simple_gatt_profile.h: 
+F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/DataStreamerService.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/target/board.h: 

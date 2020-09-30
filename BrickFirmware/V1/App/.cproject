@@ -149,7 +149,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c|Application/rcosc_calibration.h|Application/rcosc_calibration.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="PROFILES/simple_gatt_profile.c|TOOLS/src|TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -307,7 +307,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="TOOLS/cc26xx_app.cmd|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c|Application/rcosc_calibration.h|Application/rcosc_calibration.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="PROFILES/simple_gatt_profile.c|TOOLS/src|TOOLS/cc26xx_app.cmd|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -464,7 +464,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|Startup/ccfg_app_ble.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="PROFILES/simple_gatt_profile.c|TOOLS/src|TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|Startup/ccfg_app_ble.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -478,4 +478,5 @@
 		<project id="ble5_simple_peripheral_cc2640r2lp_app.com.ti.ccstudio.buildDefinitions.TMS470.ProjectType.1973508663" name="TMS470" projectType="com.ti.ccstudio.buildDefinitions.TMS470.ProjectType"/>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>

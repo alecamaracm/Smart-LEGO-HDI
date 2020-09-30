@@ -75,6 +75,8 @@ icall_userCfg_t user0Cfg = BLE_USER_CFG;
 
 #include <ti/display/Display.h>
 
+#include "Application/Drivers/WS2812Driver.h"
+
 /*******************************************************************************
  * MACROS
  */
@@ -148,6 +150,7 @@ int main()
   ICall_createRemoteTasks();
 
   SimplePeripheral_createTask();
+  WS2812Driver_createTask();
 
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();
