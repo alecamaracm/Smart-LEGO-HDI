@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LEGO_Bridge_WIN": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
