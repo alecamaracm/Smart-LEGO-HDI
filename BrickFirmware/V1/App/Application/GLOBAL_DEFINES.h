@@ -1,0 +1,16 @@
+/*
+ * GLOBAL_DEFINES.h
+ *
+ *  Created on: Oct 3, 2020
+ *      Author: aleca
+ */
+
+#ifndef APPLICATION_GLOBAL_DEFINES_H_
+#define APPLICATION_GLOBAL_DEFINES_H_
+
+#define EVENT_ENABLE_ADVERTISEMENT 69
+#define EVENT_DISABLE_ADVERTISEMENT 70
+
+
+
+#endif /* APPLICATION_GLOBAL_DEFINES_H_ */

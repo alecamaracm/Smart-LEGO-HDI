@@ -5,7 +5,8 @@
  *      Author: aleca
  */
 
-#include <Drivers/WS2812Driver.h>
+#include "Drivers/WS2812Driver.h"
+#include <ti/display/Display.h>
 #include "util.h"
 
 #include <stdint.h>
@@ -16,12 +17,62 @@
 #include <ti/sysbios/knl/Event.h>
 #include <ti/sysbios/knl/Queue.h>
 
-#include <ti/display/Display.h>
+
+
+#include <ti/sysbios/hal/Hwi.h>
+#include "PIN_HELPER.h"
+
+#include <ti/drivers/PIN.h>
+#include <stdint.h>
+#include "Application/Drivers/DO_NOT_TOUCH.h"
+
+void SendWSUpdate();
+void RGB_LEDs_setAll(uint8_t r,uint8_t g,uint8_t b);
+void UpdateCurrentRGBAnimation();
+void UpdateCurrentRGBState();
+
+typedef enum RGB_LEDS_STATE {
+    OFF,
+    CHARGING,
+    CHARGED,
+    PARTY,
+} RGB_LEDS_STATE;
+
+uint8_t RGB_LEDS_ANIMS_INTERVAL_MULTIPLER[] = {
+    1,
+    1,
+    1,
+    5,
+};
+
+
+#define LED_NUMBER 2
+
 
 Task_Struct spTaskWS;
-
 #pragma DATA_ALIGN(spTaskStackWS, 8)
 uint8_t spTaskStackWS[1024];
+
+
+
+
+//Internal use only, do NOT write there
+uint8_t WSsendBuffer[(LED_NUMBER*3)];
+//Use this buffer, in format GRBGRB,...
+uint8_t WSOutputData[(LED_NUMBER*3)];
+
+
+#define RGB_LED_ANIMATION_INTERVAL_MS 50
+int animationMultiplierCount=1000;
+#define RGB_STATUS_SELECT_INTERVAL_MULTIPLIER 10
+int rgbStatusIntervalMultiplierCount=1000;
+
+bool fadeUp=true;
+
+RGB_LEDS_STATE rgbState=PARTY;
+float brigthness=0.1f;
+
+
 
 void WS2812Driver_createTask()
 {
@@ -37,10 +88,157 @@ void WS2812Driver_createTask()
 }
 
 
+int kimball=0;
+
 static void WS2812Driver_taskFxn()
 {
-    while(true){
-        Display_printf(dispHandle, 1, 0, "WS2812Task");
-        Task_sleep(350*100);
+
+
+     PIN_setOutputEnable(&hStateHui, PIN_WS2812, 1);
+     PIN_setOutputValue(&hStateHui, PIN_WS2812, 0);
+
+     RGB_LEDs_setAll(0, 0, 0);
+
+     Display_printf(dispHandle, 1, 0, "WS2812 driver initialization finished!");
+
+
+     while(true){
+
+         //Check if the current animation mode is correct
+         if(rgbStatusIntervalMultiplierCount>RGB_STATUS_SELECT_INTERVAL_MULTIPLIER)
+         {
+             rgbStatusIntervalMultiplierCount=0;
+             UpdateCurrentRGBState();
+         }
+         rgbStatusIntervalMultiplierCount++;
+
+         //Update the current animation
+         if(animationMultiplierCount>RGB_LEDS_ANIMS_INTERVAL_MULTIPLER[rgbState]){
+             animationMultiplierCount=0;
+             UpdateCurrentRGBAnimation();
+
+             //Display_printf(dispHandle, 1, 0, "Val1: %d",PIN_getInputValue(PIN_CHARGING));
+           //  Display_printf(dispHandle, 1, 0, "Val2: %d",PIN_getInputValue(PIN_CHARGED));
+         }
+         animationMultiplierCount++;
+
+         //Send the update to the LEDs and sleep
+         SendWSUpdate();
+         Task_sleep(RGB_LED_ANIMATION_INTERVAL_MS*100);
+
+     }
+}
+
+void UpdateCurrentRGBState(){
+    switch(rgbState)
+    {
+    case OFF:
+        rgbState=PARTY;
+        break;
+    case PARTY:
+    {
+        if(PIN_getInputValue(PIN_CHARGING)==0){
+            Display_printf(dispHandle, 1, 0, "Charging started!");
+            rgbState=CHARGING;
+        }else if(PIN_getInputValue(PIN_CHARGED)==0){
+            Display_printf(dispHandle, 1, 0, "Charging complete!");
+            rgbState=CHARGED;
+        }
+        break;
+    }
+    case CHARGING:
+        if(PIN_getInputValue(PIN_CHARGING)==1){
+            Display_printf(dispHandle, 1, 0, "Charging stopped!");
+            rgbState=OFF;
+        }
+        break;
+    case CHARGED:
+        if(PIN_getInputValue(PIN_CHARGED)==1){
+            Display_printf(dispHandle, 1, 0, "Charging stopped!");
+            rgbState=OFF;
+        }
+        break;
+    default:
+        break;
+    }
+
+}
+
+void UpdateCurrentRGBAnimation()
+{
+    switch(rgbState){
+    case OFF:
+        brigthness=0;
+        RGB_LEDs_setAll(0,0,0);
+        break;
+    case CHARGING:
+        RGB_LEDs_setAll(255,0,0);
+        break;
+    case CHARGED:
+        RGB_LEDs_setAll(0,255,0);
+        break;
+    case PARTY:
+    {
+        brigthness=0.1f;
+
+        bool empty=true;
+        for(int i=0;i<LED_NUMBER*3;i++)
+        {
+            if(WSOutputData[i]!=0) empty=false;
+        }
+        if(empty) WSOutputData[0]=0xFF;
+
+        uint8_t temp=WSOutputData[0];
+        for(int i=0;i<LED_NUMBER*3-1;i++)
+        {
+            WSOutputData[i]= WSOutputData[i+1];
+        }
+        WSOutputData[LED_NUMBER*3-1]=temp;
+        break;
+    }
+    default:
+         break;
+    }
+
+    //Apply breath effect
+    if(rgbState==CHARGING || rgbState==CHARGED)
+    {
+        if(fadeUp)
+        {
+            brigthness+=0.01f;
+            if(brigthness>0.15f) fadeUp=false;
+        }else{
+            brigthness-=0.01f;
+            if(brigthness<0.025f) fadeUp=true;
+        }
+    }
+}
+
+void SendWSUpdate()
+{
+    for(int i=0;i<(LED_NUMBER*3);i++){
+        WSsendBuffer[i]=(uint8_t)(WSOutputData[i]*brigthness);
+    }
+
+    Hwi_disable();
+
+    int doSpecial=1;
+
+    int k;
+    for(int i=0;i<(LED_NUMBER*3);i++){
+        for( k=7;k>=0;k--){ //Shift out byte
+             WriteWSValue((WSsendBuffer[i]>>k) & 0x01,&doSpecial);
+        }
+    }
+
+    Hwi_enable();
+}
+
+void RGB_LEDs_setAll(uint8_t r,uint8_t g,uint8_t b)
+{
+    for(int i=0;i<(LED_NUMBER*3);i+=3){
+        WSOutputData[i]=g;
+        WSOutputData[i+1]=r;
+        WSOutputData[i+2]=b;
     }
 }

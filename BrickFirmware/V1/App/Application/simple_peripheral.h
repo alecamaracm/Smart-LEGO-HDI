@@ -56,7 +56,8 @@ extern "C"
 /*********************************************************************
  * INCLUDES
  */
-
+#include <bcomdef.h>
+#include <gap.h>
 /*********************************************************************
 *  EXTERNAL VARIABLES
 */
@@ -77,6 +78,11 @@ extern "C"
  * Task creation function for the Simple Peripheral.
  */
 extern void SimplePeripheral_createTask(void);
+
+extern bStatus_t EnableAdvertisement();
+extern bStatus_t DisableAdvertisement();
+
+extern status_t SimplePeripheral_enqueueMsg(uint8_t event, void *pData);
 
 
 /*********************************************************************

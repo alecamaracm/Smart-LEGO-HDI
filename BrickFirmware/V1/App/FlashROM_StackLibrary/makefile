@@ -11,6 +11,8 @@ GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
 "./Application/Drivers/WS2812Driver.obj" \
+"./Application/MainLoop.obj" \
+"./Application/PIN_HELPER.obj" \
 "./Application/simple_peripheral.obj" \
 "./Application/util.obj" \
 "./Drivers/ECC/ECCROMCC26XX.obj" \
@@ -21,9 +23,6 @@ ORDERED_OBJS += \
 "./ICallBLE/ble_user_config.obj" \
 "./ICallBLE/icall_api_lite.obj" \
 "./PROFILES/DataStreamerService.obj" \
-"./PROFILES/devinfoservice.obj" \
-"./PROFILES/gatt_uuid.obj" \
-"./PROFILES/gattservapp_util.obj" \
 "./Startup/board.obj" \
 "./Startup/ccfg_app_ble.obj" \
 "./Startup/main.obj" \
@@ -202,8 +201,8 @@ ble5_simple_peripheral_cc2640r2lp_app.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Application\Drivers\WS2812Driver.obj" "Application\simple_peripheral.obj" "Application\util.obj" "Drivers\ECC\ECCROMCC26XX.obj" "Drivers\TRNG\TRNGCC26XX.obj" "ICall\icall.obj" "ICall\icall_cc2650.obj" "ICall\icall_user_config.obj" "ICallBLE\ble_user_config.obj" "ICallBLE\icall_api_lite.obj" "PROFILES\DataStreamerService.obj" "PROFILES\devinfoservice.obj" "PROFILES\gatt_uuid.obj" "PROFILES\gattservapp_util.obj" "Startup\board.obj" "Startup\ccfg_app_ble.obj" "Startup\main.obj" 
-	-$(RM) "Application\Drivers\WS2812Driver.d" "Application\simple_peripheral.d" "Application\util.d" "Drivers\ECC\ECCROMCC26XX.d" "Drivers\TRNG\TRNGCC26XX.d" "ICall\icall.d" "ICall\icall_cc2650.d" "ICall\icall_user_config.d" "ICallBLE\ble_user_config.d" "ICallBLE\icall_api_lite.d" "PROFILES\DataStreamerService.d" "PROFILES\devinfoservice.d" "PROFILES\gatt_uuid.d" "PROFILES\gattservapp_util.d" "Startup\board.d" "Startup\ccfg_app_ble.d" "Startup\main.d" 
+	-$(RM) "Application\Drivers\WS2812Driver.obj" "Application\MainLoop.obj" "Application\PIN_HELPER.obj" "Application\simple_peripheral.obj" "Application\util.obj" "Drivers\ECC\ECCROMCC26XX.obj" "Drivers\TRNG\TRNGCC26XX.obj" "ICall\icall.obj" "ICall\icall_cc2650.obj" "ICall\icall_user_config.obj" "ICallBLE\ble_user_config.obj" "ICallBLE\icall_api_lite.obj" "PROFILES\DataStreamerService.obj" "Startup\board.obj" "Startup\ccfg_app_ble.obj" "Startup\main.obj" 
+	-$(RM) "Application\Drivers\WS2812Driver.d" "Application\MainLoop.d" "Application\PIN_HELPER.d" "Application\simple_peripheral.d" "Application\util.d" "Drivers\ECC\ECCROMCC26XX.d" "Drivers\TRNG\TRNGCC26XX.d" "ICall\icall.d" "ICall\icall_cc2650.d" "ICall\icall_user_config.d" "ICallBLE\ble_user_config.d" "ICallBLE\icall_api_lite.d" "PROFILES\DataStreamerService.d" "Startup\board.d" "Startup\ccfg_app_ble.d" "Startup\main.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
 	-@echo 'Finished clean'
 	-@echo ' '

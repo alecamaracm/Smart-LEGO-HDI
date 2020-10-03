@@ -56,6 +56,7 @@
 #include <ti/sysbios/knl/Queue.h>
 
 #include <ti/display/Display.h>
+#include "util.h"
 
 #if !(defined __TI_COMPILER_VERSION__)
 #include <intrinsics.h>
@@ -66,21 +67,18 @@
 #include <ti/drivers/utils/List.h>
 
 #include <icall.h>
-#include "util.h"
+
 #include <bcomdef.h>
 /* This Header file contains all BLE API and icall structure definition */
 #include <icall_ble_api.h>
 
-#include <devinfoservice.h>
-#include <DataStreamerService.h>
-
-#ifdef USE_RCOSC
-#include <rcosc_calibration.h>
-#endif //USE_RCOSC
+#include "DataStreamerService.h"
+#include "GLOBAL_DEFINES.h"
 
 #include <board.h>
 
 Display_Handle dispHandle;
+//int kimball=0;
 
 #define TBM_ROW_APP 0
 /*********************************************************************
@@ -101,10 +99,10 @@ Display_Handle dispHandle;
 #define DEFAULT_DISCOVERABLE_MODE             GAP_ADTYPE_FLAGS_GENERAL
 
 // Minimum connection interval (units of 1.25ms, 80=100ms) for parameter update request
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     80
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     20
 
 // Maximum connection interval (units of 1.25ms, 104=130ms) for  parameter update request
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     104
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     40
 
 // Slave latency to use for parameter update request
 #define DEFAULT_DESIRED_SLAVE_LATENCY         0
@@ -290,8 +288,8 @@ spClockEventData_t argPeriodic =
 spClockEventData_t argRpaRead =
 { .event = SP_READ_RPA_EVT };
 
-// Per-handle connection info
-static spConnRec_t connList[MAX_NUM_BLE_CONNS];
+
+
 
 
 
@@ -299,45 +297,47 @@ static spConnRec_t connList[MAX_NUM_BLE_CONNS];
 static List_List paramUpdateList;
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Simple Peripheral";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Brick";
 
 // Advertisement data
-static uint8_t advertData[] =
+static uint8_t advertData[31] =
 {
   0x02,   // length of this data
   GAP_ADTYPE_FLAGS,
   DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
 
-  // service UUID, to notify central devices what services are included
-  // in this peripheral
+ // 0x06,
+ // GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+ // 'B',
+ // 'R',
+ // 'I',
+  //'C',
+ // 'K',
+  0x04,   // length of this data
+  GAP_ADTYPE_MANUFACTURER_SPECIFIC, //Static string used to recognize this as a brick
+  0x20,
+  0x69,
+  0x21,
+
   0x03,   // length of this data
-  GAP_ADTYPE_16BIT_MORE,      // some of the UUID's, but not all
-  LO_UINT16(SIMPLEPROFILE_SERV_UUID),
-  HI_UINT16(SIMPLEPROFILE_SERV_UUID)
+  GAP_ADTYPE_MANUFACTURER_SPECIFIC,
+  0x00, //How many bytes in the brick ID
+  //Brick ID bytes, if any
+  0x00, //How many bytes in the brick type
+  //Brick type Bytes, if any
+
 };
 
 // Scan Response Data
 static uint8_t scanRspData[] =
 {
-  // complete name
-  17,   // length of this data
+  0x06,
   GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-  'S',
-  'i',
-  'm',
-  'p',
-  'l',
-  'e',
-  'P',
-  'e',
-  'r',
-  'i',
-  'p',
-  'h',
-  'e',
-  'r',
-  'a',
-  'l',
+  'B',
+  'R',
+  'I',
+  'C',
+  'K',
 
   // connection interval range
   5,   // length of this data
@@ -351,11 +351,12 @@ static uint8_t scanRspData[] =
   2,   // length of this data
   GAP_ADTYPE_POWER_LEVEL,
   0       // 0dBm
+
+
 };
 
 // Advertising handles
 static uint8 advHandleLegacy;
-static uint8 advHandleLongRange;
 
 // Address mode
 static GAP_Addr_Modes_t addrMode = DEFAULT_ADDRESS_MODE;
@@ -375,21 +376,12 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg);
 static void SimplePeripheral_advCallback(uint32_t event, void *pBuf, uintptr_t arg);
 static void SimplePeripheral_processAdvEvent(spGapAdvEventData_t *pEventData);
 static void SimplePeripheral_processAppMsg(spEvt_t *pMsg);
-static void SimplePeripheral_processCharValueChangeEvt(uint8_t paramId);
 
 static void SimplePeripheral_clockHandler(UArg arg);
 
-static void SimplePeripheral_processPairState(spPairStateData_t *pPairState);
-static void SimplePeripheral_processPasscode(spPasscodeData_t *pPasscodeData);
-static void SimplePeripheral_charValueChangeCB(uint8_t paramId);
-static status_t SimplePeripheral_enqueueMsg(uint8_t event, void *pData);
+status_t SimplePeripheral_enqueueMsg(uint8_t event, void *pData);
 
-static uint8_t SimplePeripheral_addConn(uint16_t connHandle);
-static uint8_t SimplePeripheral_getConnIndex(uint16_t connHandle);
-static uint8_t SimplePeripheral_removeConn(uint16_t connHandle);
 static void SimplePeripheral_processParamUpdate(uint16_t connHandle);
-static uint8_t SimplePeripheral_clearConnListEntry(uint16_t connHandle);
-static void SimplePeripheral_processConnEvt(Gap_ConnEventRpt_t *pReport);
 
 /*********************************************************************
  * EXTERN FUNCTIONS
@@ -399,14 +391,6 @@ extern void AssertHandler(uint8 assertCause, uint8 assertSubcause);
 /*********************************************************************
  * PROFILE CALLBACKS
  */
-
-
-
-// Simple GATT Profile Callbacks
-static simpleProfileCBs_t SimplePeripheral_simpleProfileCBs =
-{
-  SimplePeripheral_charValueChangeCB // Simple GATT Characteristic value change callback
-};
 
 /*********************************************************************
  * PUBLIC FUNCTIONS
@@ -429,6 +413,35 @@ static void simple_peripheral_spin(void)
   }
 }
 
+//Updates the advertisement data with the right data
+void UpdateAdvData(){
+    int initialOffset=8; //offset of the length of data
+    int length=2; //From the mandatory size+ data_type (Type of BLE data)
+
+    uint8_t buffer[8]; //Enough to store a long
+
+    int idLength=CompressLong(0x00,buffer);
+    advertData[initialOffset+length]=idLength;
+    memcpy(advertData+initialOffset+length+1, buffer, idLength);
+    length+= (1+idLength);
+
+    idLength=CompressLong(0x1112,buffer);
+    advertData[initialOffset+length]=idLength;
+    memcpy(advertData+initialOffset+length+1, buffer, idLength);
+    length+= (1+idLength);
+
+
+    advertData[initialOffset]=length-1; //The data length is not counted
+
+    GapAdv_loadByHandle(advHandleLegacy, GAP_ADV_DATA_TYPE_ADV,
+                        initialOffset+length, advertData);
+
+    Display_printf(dispHandle, SP_ROW_SEPARATOR_1, 0, "Advertisement bytes:");
+    for(int i=0;i< initialOffset+length;i++){
+        Display_printf(dispHandle, SP_ROW_SEPARATOR_1, 0, "%d",advertData[i]);
+    }
+}
+
 
 /*********************************************************************
  * @fn      SimplePeripheral_createTask
@@ -444,6 +457,7 @@ void SimplePeripheral_createTask(void)
   taskParams.stack = spTaskStack;
   taskParams.stackSize = SP_TASK_STACK_SIZE;
   taskParams.priority = SP_TASK_PRIORITY;
+
 
   Task_construct(&spTask, SimplePeripheral_taskFxn, &taskParams, NULL);
 }
@@ -463,6 +477,8 @@ static void SimplePeripheral_init(void)
   // ******************************************************************
   // Register the current thread as an ICall dispatcher application
   // so that the application can send and receive messages.
+
+
   ICall_registerApp(&selfEntity, &syncEvent);
 
 
@@ -478,24 +494,15 @@ static void SimplePeripheral_init(void)
   // http://software-dl.ti.com/lprf/ble5stack-latest/
   GGS_SetParameter(GGS_DEVICE_NAME_ATT, GAP_DEVICE_NAME_LEN, attDeviceName);
 
-  // Configure GAP
-  {
-    uint16_t paramUpdateDecision = DEFAULT_PARAM_UPDATE_REQ_DECISION;
 
-    // Pass all parameter update requests to the app for it to decide
-    GAP_SetParamValue(GAP_PARAM_LINK_UPDATE_DECISION, paramUpdateDecision);
-  }
+  // Pass all parameter update requests to the app for it to decide
+  GAP_SetParamValue(GAP_PARAM_LINK_UPDATE_DECISION, DEFAULT_PARAM_UPDATE_REQ_DECISION);
 
 
 
-  // Initialize GATT attributes
-  //GGS_AddService(GATT_ALL_SERVICES);           // GAP GATT Service
-  //GATTServApp_AddService(GATT_ALL_SERVICES);   // GATT Service
-  //DevInfo_AddService();                        // Device Information Service
-  SimpleProfile_AddService(GATT_ALL_SERVICES); // Simple GATT Profile
+  DataStreamerService_AddService();
 
-  // Register callback with SimpleGATTprofile
-  SimpleProfile_RegisterAppCBs(&SimplePeripheral_simpleProfileCBs);
+  //DataStreamerService_SetParameter(DATASTREAMERSERVICE_DATASTREAM, DATASTREAMERSERVICE_DATASTREAM_LEN, );
 
 
 
@@ -507,35 +514,18 @@ static void SimplePeripheral_init(void)
   // Register for GATT local events and ATT Responses pending for transmission
   GATT_RegisterForMsgs(selfEntity);
 
-  // Set default values for Data Length Extension
-  // Extended Data Length Feature is already enabled by default
-  {
-    // Set initial values to maximum, RX is set to max. by default(251 octets, 2120us)
-    // Some brand smartphone is essentially needing 251/2120, so we set them here.
-    #define APP_SUGGESTED_PDU_SIZE 251 //default is 27 octets(TX)
-    #define APP_SUGGESTED_TX_TIME 2120 //default is 328us(TX)
 
-    // This API is documented in hci.h
-    // See the LE Data Length Extension section in the BLE5-Stack User's Guide for information on using this command:
-    // http://software-dl.ti.com/lprf/ble5stack-latest/
-    HCI_LE_WriteSuggestedDefaultDataLenCmd(APP_SUGGESTED_PDU_SIZE, APP_SUGGESTED_TX_TIME);
-  }
+  HCI_LE_WriteSuggestedDefaultDataLenCmd(251, 2120);
 
   // Initialize GATT Client
   GATT_InitClient();
 
-
-  // Initialize Connection List
-  SimplePeripheral_clearConnListEntry(CONNHANDLE_ALL);
 
   //Initialize GAP layer for Peripheral role and register to receive GAP events
   GAP_DeviceInit(GAP_PROFILE_PERIPHERAL, selfEntity, addrMode, NULL);
 
 
 
-  // The type of display is configured based on the BOARD_DISPLAY_USE...
-  // preprocessor definitions
-  dispHandle = Display_open(Display_Type_ANY, NULL);
 
   Display_printf(dispHandle, SP_ROW_SEPARATOR_1, 0, "====================");
 
@@ -607,6 +597,7 @@ static void SimplePeripheral_taskFxn(UArg a0, UArg a1)
 
             // Free the space from the message.
             ICall_free(pMsg);
+         //   pMsg+=kimbal;
           }
         }
       }
@@ -627,6 +618,7 @@ static uint8_t SimplePeripheral_processStackMsg(ICall_Hdr *pMsg)
 {
   // Always dealloc pMsg unless set otherwise
   uint8_t safeToDealloc = TRUE;
+
 
   switch (pMsg->event)
   {
@@ -733,23 +725,17 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
 
   switch (pMsg->event)
   {
-    case SP_CHAR_CHANGE_EVT:
-      SimplePeripheral_processCharValueChangeEvt(*(uint8_t*)(pMsg->pData));
-      break;
+     case EVENT_ENABLE_ADVERTISEMENT:
+       EnableAdvertisement();
+       break;
 
+     case EVENT_DISABLE_ADVERTISEMENT:
+       DisableAdvertisement();
+       break;
 
     case SP_ADV_EVT:
       SimplePeripheral_processAdvEvent((spGapAdvEventData_t*)(pMsg->pData));
       break;
-
-    case SP_PAIR_STATE_EVT:
-      SimplePeripheral_processPairState((spPairStateData_t*)(pMsg->pData));
-      break;
-
-    case SP_PASSCODE_EVT:
-      SimplePeripheral_processPasscode((spPasscodeData_t*)(pMsg->pData));
-      break;
-
 
     case SP_SEND_PARAM_UPDATE_EVT:
     {
@@ -763,10 +749,6 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
       break;
     }
 
-    case SP_CONN_EVT:
-      SimplePeripheral_processConnEvt((Gap_ConnEventRpt_t *)(pMsg->pData));
-      break;
-
     default:
       // Do nothing.
       break;
@@ -777,6 +759,14 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
   {
     ICall_free(pMsg->pData);
   }
+}
+
+bStatus_t EnableAdvertisement(){
+    return GapAdv_enable(advHandleLegacy, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
+}
+
+bStatus_t DisableAdvertisement(){
+    return GapAdv_disable(advHandleLegacy);
 }
 
 /*********************************************************************
@@ -798,25 +788,6 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
 
       if(pPkt->hdr.status == SUCCESS)
       {
-        // Store the system ID
-        uint8_t systemId[DEVINFO_SYSTEM_ID_LEN];
-
-        // use 6 bytes of device address for 8 bytes of system ID value
-        systemId[0] = pPkt->devAddr[0];
-        systemId[1] = pPkt->devAddr[1];
-        systemId[2] = pPkt->devAddr[2];
-
-        // set middle bytes to zero
-        systemId[4] = 0x00;
-        systemId[3] = 0x00;
-
-        // shift three bytes up
-        systemId[7] = pPkt->devAddr[5];
-        systemId[6] = pPkt->devAddr[4];
-        systemId[5] = pPkt->devAddr[3];
-
-        // Set Device Info Service Parameter
-        DevInfo_SetParameter(DEVINFO_SYSTEM_ID, DEVINFO_SYSTEM_ID_LEN, systemId);
 
         Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Initialized");
 
@@ -834,8 +805,9 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
         SIMPLEPERIPHERAL_ASSERT(status == SUCCESS);
 
         // Load advertising data for set #1 that is statically allocated by the app
-        status = GapAdv_loadByHandle(advHandleLegacy, GAP_ADV_DATA_TYPE_ADV,
-                                     sizeof(advertData), advertData);
+        /*status = GapAdv_loadByHandle(advHandleLegacy, GAP_ADV_DATA_TYPE_ADV,
+                                     sizeof(advertData), advertData);*/
+        UpdateAdvData();
         SIMPLEPERIPHERAL_ASSERT(status == SUCCESS);
 
         // Load scan response data for set #1 that is statically allocated by the app
@@ -849,8 +821,14 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
                                      GAP_ADV_EVT_MASK_END_AFTER_DISABLE |
                                      GAP_ADV_EVT_MASK_SET_TERMINATED);
 
-        // Enable legacy advertising for set #1
-        status = GapAdv_enable(advHandleLegacy, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
+
+        // Enable legacy advertising for set #1 if neccessary
+
+        //status = EnableAdvertisement();
+
+
+
+
         SIMPLEPERIPHERAL_ASSERT(status == SUCCESS);
 
 
@@ -869,77 +847,34 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
     {
       gapEstLinkReqEvent_t *pPkt = (gapEstLinkReqEvent_t *)pMsg;
 
-      // Display the amount of current connections
-      uint8_t numActive = linkDB_NumActive();
-      Display_printf(dispHandle, SP_ROW_STATUS_2, 0, "Num Conns: %d",
-                     (uint16_t)numActive);
-
       if (pPkt->hdr.status == SUCCESS)
       {
-        // Add connection to list and start RSSI
-        SimplePeripheral_addConn(pPkt->connectionHandle);
-
         // Display the address of this connection
-        Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Connected to %s",
-                       Util_convertBdAddr2Str(pPkt->devAddr));
+        Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Connected to device: %s", Util_convertBdAddr2Str(pPkt->devAddr));
 
-
-        // Start Periodic Clock.
-        Util_startClock(&clkPeriodic);
+        // Stop advertising since a device is connected
+        DisableAdvertisement();
       }
-
-      if (numActive < MAX_NUM_BLE_CONNS)
-      {
-        // Start advertising since there is room for more connections
-        GapAdv_enable(advHandleLegacy, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
-        GapAdv_enable(advHandleLongRange, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
-      }
-      else
-      {
-        // Stop advertising since there is no room for more connections
-        GapAdv_disable(advHandleLongRange);
-        GapAdv_disable(advHandleLegacy);
-      }
-
       break;
     }
 
     case GAP_LINK_TERMINATED_EVENT:
     {
-      gapTerminateLinkEvent_t *pPkt = (gapTerminateLinkEvent_t *)pMsg;
 
-      // Display the amount of current connections
-      uint8_t numActive = linkDB_NumActive();
       Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Device Disconnected!");
-      Display_printf(dispHandle, SP_ROW_STATUS_2, 0, "Num Conns: %d",
-                     (uint16_t)numActive);
 
-      // Remove the connection from the list and disable RSSI if needed
-      SimplePeripheral_removeConn(pPkt->connectionHandle);
-
-      // If no active connections
-      if (numActive == 0)
+      // If dataStream is still ready, enable advertisements again after disconnect
+      if(dataStreamReady)
       {
-        // Stop periodic clock
-        Util_stopClock(&clkPeriodic);
-
-
+          EnableAdvertisement();
       }
 
-      // Start advertising since there is room for more connections
-      GapAdv_enable(advHandleLegacy, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
-      GapAdv_enable(advHandleLongRange, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
-
-      // Clear remaining lines
-      Display_clearLine(dispHandle, SP_ROW_CONNECTION);
 
       break;
     }
 
     case GAP_UPDATE_LINK_PARAM_REQ_EVENT:
     {
-
-
       gapUpdateLinkParamReqReply_t rsp;
 
       gapUpdateLinkParamReqEvent_t *pReq = (gapUpdateLinkParamReqEvent_t *)pMsg;
@@ -1009,56 +944,7 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
   }
 }
 
-/*********************************************************************
- * @fn      SimplePeripheral_charValueChangeCB
- *
- * @brief   Callback from Simple Profile indicating a characteristic
- *          value change.
- *
- * @param   paramId - parameter Id of the value that was changed.
- *
- * @return  None.
- */
-static void SimplePeripheral_charValueChangeCB(uint8_t paramId)
-{
-  uint8_t *pValue = ICall_malloc(sizeof(uint8_t));
 
-  if (pValue)
-  {
-    *pValue = paramId;
-
-    if (SimplePeripheral_enqueueMsg(SP_CHAR_CHANGE_EVT, pValue) != SUCCESS)
-    {
-      ICall_free(pValue);
-    }
-  }
-}
-
-/*********************************************************************
- * @fn      SimplePeripheral_processCharValueChangeEvt
- *
- * @brief   Process a pending Simple Profile characteristic value change
- *          event.
- *
- * @param   paramID - parameter ID of the value that was changed.
- */
-static void SimplePeripheral_processCharValueChangeEvt(uint8_t paramId)
-{
-  uint8_t newValue;
-
-  switch(paramId)
-  {
-    case SIMPLEPROFILE_CHAR1:
-      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR1, &newValue);
-
-      Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Char 1: %d", (uint16_t)newValue);
-      break;
-
-    default:
-      // should not reach here!
-      break;
-  }
-}
 
 
 
@@ -1135,30 +1021,14 @@ static void SimplePeripheral_processAdvEvent(spGapAdvEventData_t *pEventData)
   switch (pEventData->event)
   {
     case GAP_EVT_ADV_START_AFTER_ENABLE:
-      Display_printf(dispHandle, SP_ROW_ADVSTATE, 0, "Adv Set %d Enabled",
-                     *(uint8_t *)(pEventData->pBuf));
+        Display_printf(dispHandle, SP_ROW_ADVSTATE, 0, "Advertisements successfully started");
       break;
 
     case GAP_EVT_ADV_END_AFTER_DISABLE:
-      Display_printf(dispHandle, SP_ROW_ADVSTATE, 0, "Adv Set %d Disabled",
-                     *(uint8_t *)(pEventData->pBuf));
+        Display_printf(dispHandle, SP_ROW_ADVSTATE, 0, "Advertisements successfully turned off");
       break;
 
-    case GAP_EVT_ADV_START:
-      break;
 
-    case GAP_EVT_ADV_END:
-      break;
-
-    case GAP_EVT_ADV_SET_TERMINATED:
-    {
-#ifndef Display_DISABLE_ALL
-      GapAdv_setTerm_t *advSetTerm = (GapAdv_setTerm_t *)(pEventData->pBuf);
-#endif
-      Display_printf(dispHandle, SP_ROW_ADVSTATE, 0, "Adv Set %d disabled after conn %d",
-                     advSetTerm->handle, advSetTerm->connHandle );
-    }
-    break;
 
     case GAP_EVT_SCAN_REQ_RECEIVED:
       break;
@@ -1179,106 +1049,7 @@ static void SimplePeripheral_processAdvEvent(spGapAdvEventData_t *pEventData)
 }
 
 
-/*********************************************************************
- * @fn      SimplePeripheral_processPairState
- *
- * @brief   Process the new paring state.
- *
- * @return  none
- */
-static void SimplePeripheral_processPairState(spPairStateData_t *pPairData)
-{
-  uint8_t state = pPairData->state;
-  uint8_t status = pPairData->status;
 
-  switch (state)
-  {
-    case GAPBOND_PAIRING_STATE_STARTED:
-      Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Pairing started");
-      break;
-
-    case GAPBOND_PAIRING_STATE_COMPLETE:
-      if (status == SUCCESS)
-      {
-        Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Pairing success");
-      }
-      else
-      {
-        Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Pairing fail: %d", status);
-      }
-      break;
-
-    case GAPBOND_PAIRING_STATE_ENCRYPTED:
-      if (status == SUCCESS)
-      {
-        Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Encryption success");
-      }
-      else
-      {
-        Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Encryption failed: %d", status);
-      }
-      break;
-
-    case GAPBOND_PAIRING_STATE_BOND_SAVED:
-      if (status == SUCCESS)
-      {
-        Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Bond save success");
-      }
-      else
-      {
-        Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Bond save failed: %d", status);
-      }
-      break;
-
-    default:
-      break;
-  }
-}
-
-/*********************************************************************
- * @fn      SimplePeripheral_processPasscode
- *
- * @brief   Process the Passcode request.
- *
- * @return  none
- */
-static void SimplePeripheral_processPasscode(spPasscodeData_t *pPasscodeData)
-{
-  // Display passcode to user
-  if (pPasscodeData->uiOutputs != 0)
-  {
-    Display_printf(dispHandle, SP_ROW_CONNECTION, 0, "Passcode: %d",
-                   B_APP_DEFAULT_PASSCODE);
-  }
-
-}
-
-
-/*********************************************************************
- * @fn      SimplePeripheral_processConnEvt
- *
- * @brief   Process connection event.
- *
- * @param pReport pointer to connection event report
- */
-static void SimplePeripheral_processConnEvt(Gap_ConnEventRpt_t *pReport)
-{
-  // Get index from handle
-  uint8_t connIndex = SimplePeripheral_getConnIndex(pReport->handle);
-
-  if (connIndex >= MAX_NUM_BLE_CONNS)
-  {
-    Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Connection handle is not in the connList !!!");
-    return;
-  }
-
-  // If auto phy change is enabled
-  if (connList[connIndex].isAutoPHYEnable == TRUE)
-  {
-    // Read the RSSI
-    HCI_ReadRssiCmd(pReport->handle);
-  }
-}
 
 
 /*********************************************************************
@@ -1289,7 +1060,7 @@ static void SimplePeripheral_processConnEvt(Gap_ConnEventRpt_t *pReport)
  * @param   event - message event.
  * @param   state - message state.
  */
-static status_t SimplePeripheral_enqueueMsg(uint8_t event, void *pData)
+status_t SimplePeripheral_enqueueMsg(uint8_t event, void *pData)
 {
   uint8_t success;
   spEvt_t *pMsg = ICall_malloc(sizeof(spEvt_t));
@@ -1309,133 +1080,6 @@ static status_t SimplePeripheral_enqueueMsg(uint8_t event, void *pData)
 }
 
 
-/*********************************************************************
- * @fn      SimplePeripheral_addConn
- *
- * @brief   Add a device to the connected device list
- *
- * @return  index of the connected device list entry where the new connection
- *          info is put in.
- *          if there is no room, MAX_NUM_BLE_CONNS will be returned.
- */
-static uint8_t SimplePeripheral_addConn(uint16_t connHandle)
-{
-  uint8_t i;
-  uint8_t status = bleNoResources;
-
-  // Try to find an available entry
-  for (i = 0; i < MAX_NUM_BLE_CONNS; i++)
-  {
-    if (connList[i].connHandle == CONNHANDLE_INVALID)
-    {
-      // Found available entry to put a new connection info in
-      connList[i].connHandle = connHandle;
-
-      // Allocate data to send through clock handler
-      connList[i].pParamUpdateEventData = ICall_malloc(sizeof(spClockEventData_t) +
-                                                       sizeof (uint16_t));
-      if(connList[i].pParamUpdateEventData)
-      {
-        connList[i].pParamUpdateEventData->event = SP_SEND_PARAM_UPDATE_EVT;
-        *((uint16_t *)connList[i].pParamUpdateEventData->data) = connHandle;
-
-        // Create a clock object and start
-        connList[i].pUpdateClock
-          = (Clock_Struct*) ICall_malloc(sizeof(Clock_Struct));
-
-        if (connList[i].pUpdateClock)
-        {
-          Util_constructClock(connList[i].pUpdateClock,
-                              SimplePeripheral_clockHandler,
-                              SP_SEND_PARAM_UPDATE_DELAY, 0, true,
-                              (UArg) (connList[i].pParamUpdateEventData));
-        }
-        else
-        {
-            ICall_free(connList[i].pParamUpdateEventData);
-        }
-      }
-      else
-      {
-        status = bleMemAllocError;
-      }
-
-      // Set default PHY to 1M
-      connList[i].currPhy = HCI_PHY_1_MBPS;
-
-      break;
-    }
-  }
-
-  return status;
-}
-
-/*********************************************************************
- * @fn      SimplePeripheral_getConnIndex
- *
- * @brief   Find index in the connected device list by connHandle
- *
- * @return  the index of the entry that has the given connection handle.
- *          if there is no match, MAX_NUM_BLE_CONNS will be returned.
- */
-static uint8_t SimplePeripheral_getConnIndex(uint16_t connHandle)
-{
-  uint8_t i;
-
-  for (i = 0; i < MAX_NUM_BLE_CONNS; i++)
-  {
-    if (connList[i].connHandle == connHandle)
-    {
-      return i;
-    }
-  }
-
-  return(MAX_NUM_BLE_CONNS);
-}
-
-/*********************************************************************
- * @fn      SimplePeripheral_getConnIndex
- *
- * @brief   Find index in the connected device list by connHandle
- *
- * @return  SUCCESS if connHandle found valid index or bleInvalidRange
- *          if index wasn't found. CONNHANDLE_ALL will always succeed.
- */
-static uint8_t SimplePeripheral_clearConnListEntry(uint16_t connHandle)
-{
-  uint8_t i;
-  // Set to invalid connection index initially
-  uint8_t connIndex = MAX_NUM_BLE_CONNS;
-
-  if(connHandle != CONNHANDLE_ALL)
-  {
-    // Get connection index from handle
-    connIndex = SimplePeripheral_getConnIndex(connHandle);
-    if(connIndex >= MAX_NUM_BLE_CONNS)
-	{
-	  return(bleInvalidRange);
-	}
-  }
-
-  // Clear specific handle or all handles
-  for(i = 0; i < MAX_NUM_BLE_CONNS; i++)
-  {
-    if((connIndex == i) || (connHandle == CONNHANDLE_ALL))
-    {
-      connList[i].connHandle = CONNHANDLE_INVALID;
-      connList[i].currPhy = 0;
-      connList[i].phyCngRq = 0;
-      connList[i].phyRqFailCnt = 0;
-      connList[i].rqPhy = 0;
-      memset(connList[i].rssiArr, 0, SP_MAX_RSSI_STORE_DEPTH);
-      connList[i].rssiAvg = 0;
-      connList[i].rssiCntr = 0;
-      connList[i].isAutoPHYEnable = FALSE;
-    }
-  }
-
-  return(SUCCESS);
-}
 
 /*********************************************************************
  * @fn      SimplePeripheral_clearPendingParamUpdate
@@ -1459,46 +1103,6 @@ void SimplePeripheral_clearPendingParamUpdate(uint16_t connHandle)
   }
 }
 
-/*********************************************************************
- * @fn      SimplePeripheral_removeConn
- *
- * @brief   Remove a device from the connected device list
- *
- * @return  index of the connected device list entry where the new connection
- *          info is removed from.
- *          if connHandle is not found, MAX_NUM_BLE_CONNS will be returned.
- */
-static uint8_t SimplePeripheral_removeConn(uint16_t connHandle)
-{
-  uint8_t connIndex = SimplePeripheral_getConnIndex(connHandle);
-
-  if(connIndex != MAX_NUM_BLE_CONNS)
-  {
-    Clock_Struct* pUpdateClock = connList[connIndex].pUpdateClock;
-
-    if (pUpdateClock != NULL)
-    {
-      // Stop and destruct the RTOS clock if it's still alive
-      if (Util_isActive(pUpdateClock))
-      {
-        Util_stopClock(pUpdateClock);
-      }
-
-      // Destruct the clock object
-      Clock_destruct(pUpdateClock);
-      // Free clock struct
-      ICall_free(pUpdateClock);
-      // Free ParamUpdateEventData
-      ICall_free(connList[connIndex].pParamUpdateEventData);
-    }
-    // Clear pending update requests from paramUpdateList
-    SimplePeripheral_clearPendingParamUpdate(connHandle);
-    // Clear Connection List Entry
-    SimplePeripheral_clearConnListEntry(connHandle);
-  }
-
-  return connIndex;
-}
 
 /*********************************************************************
  * @fn      SimplePeripheral_processParamUpdate
@@ -1510,7 +1114,6 @@ static uint8_t SimplePeripheral_removeConn(uint16_t connHandle)
 static void SimplePeripheral_processParamUpdate(uint16_t connHandle)
 {
   gapUpdateLinkParamReq_t req;
-  uint8_t connIndex;
 
   req.connectionHandle = connHandle;
   req.connLatency = DEFAULT_DESIRED_SLAVE_LATENCY;
@@ -1518,25 +1121,6 @@ static void SimplePeripheral_processParamUpdate(uint16_t connHandle)
   req.intervalMin = DEFAULT_DESIRED_MIN_CONN_INTERVAL;
   req.intervalMax = DEFAULT_DESIRED_MAX_CONN_INTERVAL;
 
-  connIndex = SimplePeripheral_getConnIndex(connHandle);
-  if (connIndex >= MAX_NUM_BLE_CONNS)
-  {
-    Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Connection handle is not in the connList !!!");
-    return;
-  }
-
-
-  // Deconstruct the clock object
-  Clock_destruct(connList[connIndex].pUpdateClock);
-  // Free clock struct, only in case it is not NULL
-  if (connList[connIndex].pUpdateClock != NULL)
-  {
-    ICall_free(connList[connIndex].pUpdateClock);
-    connList[connIndex].pUpdateClock = NULL;
-  }
-  // Free ParamUpdateEventData, only in case it is not NULL
-  if (connList[connIndex].pParamUpdateEventData != NULL)
-    ICall_free(connList[connIndex].pParamUpdateEventData);
 
   // Send parameter update
   bStatus_t status = GAP_UpdateLinkParamReq(&req);

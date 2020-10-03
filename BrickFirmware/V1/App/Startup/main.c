@@ -76,6 +76,10 @@ icall_userCfg_t user0Cfg = BLE_USER_CFG;
 #include <ti/display/Display.h>
 
 #include "Application/Drivers/WS2812Driver.h"
+#include "Application/MainLoop.h"
+
+#include "util.h"
+#include "PIN_HELPER.h"
 
 /*******************************************************************************
  * MACROS
@@ -149,8 +153,14 @@ int main()
   /* Start tasks of external images - Priority 5 */
   ICall_createRemoteTasks();
 
+
+  InitializePins();
+
+  dispHandle = Display_open(Display_Type_ANY, NULL);
+
   SimplePeripheral_createTask();
   WS2812Driver_createTask();
+  MainLoop_createTask();
 
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();

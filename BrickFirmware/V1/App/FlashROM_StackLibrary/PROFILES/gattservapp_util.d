@@ -228,7 +228,7 @@ PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/t
 PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h
 PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h
 PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/l2cap.h
-PROFILES/gattservapp_util.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/gatt_uuid.h
+PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_uuid.h
 PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_advertiser.h
 PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_scanner.h
 PROFILES/gattservapp_util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_initiator.h
@@ -483,7 +483,7 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/..
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/l2cap.h: 
-F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/gatt_uuid.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_uuid.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_advertiser.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_scanner.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_initiator.h: 

@@ -152,41 +152,29 @@ Application/simple_peripheral.obj: C:/ti/ccs1011/xdctools_3_61_02_27_core/packag
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Event__epilogue.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Queue.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/display/Display.h
-Application/simple_peripheral.obj: ../Application/simple_peripheral.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/utils/List.h
-Application/simple_peripheral.obj: C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/src/inc/icall.h
-Application/simple_peripheral.obj: C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdlib.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_assert.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/../_common/cc26xx/_hal_types.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_defs.h
 Application/simple_peripheral.obj: ../Application/util.h
+Application/simple_peripheral.obj: C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Clock.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Queue.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Event.h
+Application/simple_peripheral.obj: ../Application/simple_peripheral.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/bcomdef.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/comdef.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_api.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_apimsg.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_ext.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/../_common/cc26xx/_hal_types.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_defs.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal.h
 Application/simple_peripheral.obj: C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/limits.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_memory.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_timers.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/controller/cc26xx/inc/ll.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_data.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_event.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gapgattserver.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb_internal.h
-Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/Include/gapbondmgr.h
-Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/src/inc/icall.h
+Application/simple_peripheral.obj: C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdlib.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_assert.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/sm.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/controller/cc26xx/inc/ll.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/controller/cc26xx/inc/ll_ae.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/cc26xx/rf_hal.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
@@ -196,6 +184,7 @@ Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/sour
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/rf/RF.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/dpl/ClockP.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/dpl/SemaphoreP.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/utils/List.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/DeviceFamily.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/rf_common_cmd.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/rf_mailbox.h
@@ -233,14 +222,25 @@ Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/sour
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_api.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_apimsg.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_ext.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_data.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_event.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gapgattserver.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb_internal.h
+Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/Include/gapbondmgr.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/l2cap.h
-Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/gatt_uuid.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_uuid.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_advertiser.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_scanner.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_initiator.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/att.h
-Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/gatt_profile_uuid.h
+Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_profile_uuid.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gattservapp.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_snv.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
@@ -260,8 +260,8 @@ Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/sour
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/map_direct.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/TRNGCC26XX.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_api_idx.h
-Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/devinfoservice.h
 Application/simple_peripheral.obj: F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/DataStreamerService.h
+Application/simple_peripheral.obj: ../Application/GLOBAL_DEFINES.h
 Application/simple_peripheral.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/target/board.h
 
 ../Application/simple_peripheral.c: 
@@ -416,41 +416,29 @@ C:/ti/ccs1011/xdctools_3_61_02_27_core/packages/xdc/runtime/IModule.h:
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Event__epilogue.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Queue.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/display/Display.h: 
-../Application/simple_peripheral.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/utils/List.h: 
-C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/src/inc/icall.h: 
-C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdlib.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_assert.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/../_common/cc26xx/_hal_types.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_defs.h: 
 ../Application/util.h: 
+C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Clock.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Queue.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/kernel/tirtos/packages/ti/sysbios/knl/Event.h: 
+../Application/simple_peripheral.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/bcomdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/comdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_api.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_apimsg.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_ext.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/../_common/cc26xx/_hal_types.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_defs.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal.h: 
 C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/limits.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_memory.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_timers.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/controller/cc26xx/inc/ll.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_data.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_event.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gapgattserver.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb_internal.h: 
-F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/Include/gapbondmgr.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/src/inc/icall.h: 
+C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdlib.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_assert.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/sm.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/controller/cc26xx/inc/ll.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/controller/cc26xx/inc/ll_ae.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/cc26xx/rf_hal.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
@@ -460,6 +448,7 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/controller/cc26xx/i
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/rf/RF.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/dpl/ClockP.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/dpl/SemaphoreP.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/utils/List.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/DeviceFamily.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/rf_common_cmd.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/rf_mailbox.h: 
@@ -497,14 +486,25 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/..
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_api.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_ble_apimsg.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_ext.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_data.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_event.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/hci_tl.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gapgattserver.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/linkdb_internal.h: 
+F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/Include/gapbondmgr.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/l2cap.h: 
-F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/gatt_uuid.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_uuid.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_advertiser.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_scanner.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_initiator.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/att.h: 
-F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/gatt_profile_uuid.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_profile_uuid.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gattservapp.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_snv.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
@@ -524,6 +524,6 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/rom_jt.h
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/map_direct.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/TRNGCC26XX.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/icall/inc/icall_api_idx.h: 
-F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/devinfoservice.h: 
 F:/SeniorCapstone_LEGO/BrickFirmware/V1/App/PROFILES/DataStreamerService.h: 
+../Application/GLOBAL_DEFINES.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/target/board.h: 

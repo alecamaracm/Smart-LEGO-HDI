@@ -73,6 +73,7 @@ extern "C" {
 *  EXTERNAL VARIABLES
 */
 extern Display_Handle dispHandle;
+//extern int kimball=0;
 /*********************************************************************
  * CONSTANTS
  */
@@ -103,6 +104,8 @@ typedef struct
 /*********************************************************************
  * API FUNCTIONS
  */
+
+uint8_t CompressLong(long toCompress,uint8_t * buffer);
 
 /**
  * @brief   Initialize a TIRTOS Clock instance.

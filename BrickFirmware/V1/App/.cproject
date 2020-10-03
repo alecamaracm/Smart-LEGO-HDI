@@ -32,7 +32,7 @@
 							<option id="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.1369556428" name="Compiler version" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION" value="20.2.1.LTS" valueType="string"/>
 							<targetPlatform id="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.targetPlatformDebug.392581474" name="Platform" superClass="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.targetPlatformDebug"/>
 							<builder buildPath="${BuildDirectory}" id="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.builderDebug.2117229984" keepEnvironmentInBuildfile="false" name="GNU Make" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.builderDebug"/>
-							<tool id="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.compilerDebug.979393597" name="ARM Compiler" superClass="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.compilerDebug">
+							<tool command="&quot;${CG_TOOL_CL}&quot; -S" id="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.compilerDebug.979393597" name="ARM Compiler" superClass="com.ti.ccstudio.buildDefinitions.TMS470_20.2.exe.compilerDebug">
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.SILICON_VERSION.1555462455" name="Target processor version (--silicon_version, -mv)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.SILICON_VERSION" useByScannerDiscovery="false" value="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.SILICON_VERSION.7M3" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.CODE_STATE.984015552" name="Designate code state, 16-bit (thumb) or 32-bit (--code_state)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.CODE_STATE" useByScannerDiscovery="false" value="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.CODE_STATE.16" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.ABI.770997955" name="Application binary interface. (--abi)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.ABI" useByScannerDiscovery="false" value="com.ti.ccstudio.buildDefinitions.TMS470_20.2.compilerID.ABI.eabi" valueType="enumerated"/>
@@ -149,7 +149,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="PROFILES/simple_gatt_profile.c|TOOLS/src|TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="TOOLS/src|TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -307,7 +307,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="PROFILES/simple_gatt_profile.c|TOOLS/src|TOOLS/cc26xx_app.cmd|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="TOOLS/src|TOOLS/cc26xx_app.cmd|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_RCOSC.opt|Startup/ccfg_app_ble_rcosc.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -464,7 +464,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="PROFILES/simple_gatt_profile.c|TOOLS/src|TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|Startup/ccfg_app_ble.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="TOOLS/src|TOOLS/cc26xx_app.cmd|NPI/npi_tl_uart.c|NPI/npi_tl.c|NPI/npi_task.c|NPI/npi_rxbuf.c|NPI/npi_frame_hci.c|ICallBLE/icall_hci_tl.c|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary.opt|TOOLS/defines/ble5_simple_peripheral_cc2640r2lp_app_FlashROM_StackLibrary_PTM.opt|Startup/ccfg_app_ble.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

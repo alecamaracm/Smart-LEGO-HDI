@@ -91,6 +91,27 @@ typedef struct _queueRec_
  * PUBLIC FUNCTIONS
  */
 
+
+// The output buffer must be at least (long) bytes long!
+// Compressed a long into a NON_ZERO_BYTES byte array.
+// Returns the length of the NON_ZERO bytes
+uint8_t CompressLong(long toCompress,uint8_t * buffer)
+{
+    int buffIndex=0;
+    while(toCompress>0)
+    {
+        //Save the first 8 bits of the number
+        buffer[buffIndex]=(uint8_t)toCompress;
+        //Get rid of the used bits
+        toCompress=toCompress>>8;
+        buffIndex++;
+    }
+
+    //Return the byte count
+    return buffIndex;
+}
+
+
 /*********************************************************************
  * @fn      Util_constructClock
  *
