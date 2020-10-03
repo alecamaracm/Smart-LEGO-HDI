@@ -105,7 +105,10 @@ typedef struct
  * API FUNCTIONS
  */
 
-uint8_t CompressLong(long toCompress,uint8_t * buffer);
+uint8_t CompressLong(unsigned long toCompress,uint8_t * buffer);
+
+unsigned long getBrickID();
+void setBrickID(unsigned long idToSet);
 
 /**
  * @brief   Initialize a TIRTOS Clock instance.

@@ -60,7 +60,10 @@
 #include <stdlib.h>
 #endif
 
+#include "GLOBAL_DEFINES.h"
+
 #include "bcomdef.h"
+#include <icall_ble_api.h>
 #include "util.h"
 
 
@@ -95,7 +98,7 @@ typedef struct _queueRec_
 // The output buffer must be at least (long) bytes long!
 // Compressed a long into a NON_ZERO_BYTES byte array.
 // Returns the length of the NON_ZERO bytes
-uint8_t CompressLong(long toCompress,uint8_t * buffer)
+uint8_t CompressLong(unsigned long toCompress,uint8_t * buffer)
 {
     int buffIndex=0;
     while(toCompress>0)
@@ -110,6 +113,38 @@ uint8_t CompressLong(long toCompress,uint8_t * buffer)
     //Return the byte count
     return buffIndex;
 }
+
+unsigned long getBrickID(){
+    unsigned long toWrite=0;
+    uint8_t buffer[8];
+    int status = osal_snv_read(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)buffer);
+
+    for(int i=0;i<8;i++)
+    {
+        toWrite+=(((unsigned long)buffer[i])<<(8*i));
+    }
+
+    Display_printf(dispHandle, 0, 1, "SNV ID READ: %lu, status=%d", toWrite,status);
+
+    if(status == SUCCESS)
+    {
+        return toWrite;
+    }else{
+        return 0;
+    }
+}
+
+void setBrickID(unsigned long idToSet){
+    uint8_t buffer[8];
+    for (int i = 0; i < 8; i++)
+    {
+        buffer[i] = ((idToSet >> (8 * i)) & 0XFF);
+    }
+    int status = osal_snv_write(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)buffer);
+
+    Display_printf(dispHandle, 0, 1, "SNV ID WRITE: %lu, status=%d", idToSet,status);
+}
+
 
 
 /*********************************************************************

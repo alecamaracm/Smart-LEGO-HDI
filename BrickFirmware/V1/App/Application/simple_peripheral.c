@@ -73,6 +73,7 @@
 #include <icall_ble_api.h>
 
 #include "DataStreamerService.h"
+#include "MiscService.h"
 #include "GLOBAL_DEFINES.h"
 
 #include <board.h>
@@ -420,26 +421,28 @@ void UpdateAdvData(){
 
     uint8_t buffer[8]; //Enough to store a long
 
-    int idLength=CompressLong(0x00,buffer);
+    int idLength=0;
+
+    idLength=CompressLong(getBrickID(),buffer);
     advertData[initialOffset+length]=idLength;
     memcpy(advertData+initialOffset+length+1, buffer, idLength);
     length+= (1+idLength);
 
-    idLength=CompressLong(0x1112,buffer);
+    idLength=CompressLong(BRICK_TYPE,buffer);
     advertData[initialOffset+length]=idLength;
     memcpy(advertData+initialOffset+length+1, buffer, idLength);
     length+= (1+idLength);
-
 
     advertData[initialOffset]=length-1; //The data length is not counted
 
     GapAdv_loadByHandle(advHandleLegacy, GAP_ADV_DATA_TYPE_ADV,
                         initialOffset+length, advertData);
 
-    Display_printf(dispHandle, SP_ROW_SEPARATOR_1, 0, "Advertisement bytes:");
+   /* Display_printf(dispHandle, SP_ROW_SEPARATOR_1, 0, "Advertisement bytes:");
     for(int i=0;i< initialOffset+length;i++){
         Display_printf(dispHandle, SP_ROW_SEPARATOR_1, 0, "%d",advertData[i]);
-    }
+    }*/
+
 }
 
 
@@ -501,6 +504,7 @@ static void SimplePeripheral_init(void)
 
 
   DataStreamerService_AddService();
+  MiscService_AddService();
 
   //DataStreamerService_SetParameter(DATASTREAMERSERVICE_DATASTREAM, DATASTREAMERSERVICE_DATASTREAM_LEN, );
 
@@ -733,6 +737,21 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
        DisableAdvertisement();
        break;
 
+     case EVENT_UPDATE_BRICKID:
+     {
+         unsigned long newID=0;
+         MiscService_GetParameter(MISCSERVICE_SETUPID,&newID);
+         setBrickID(newID);
+
+         DisableAdvertisement();
+
+         UpdateAdvData();
+
+         EnableAdvertisement();
+
+         break;
+     }
+
     case SP_ADV_EVT:
       SimplePeripheral_processAdvEvent((spGapAdvEventData_t*)(pMsg->pData));
       break;
@@ -762,6 +781,8 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
 }
 
 bStatus_t EnableAdvertisement(){
+    //DisableAdvertisement();
+    //UpdateAdvData();
     return GapAdv_enable(advHandleLegacy, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
 }
 
@@ -866,6 +887,7 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
       // If dataStream is still ready, enable advertisements again after disconnect
       if(dataStreamReady)
       {
+          //SimplePeripheral_enqueueMsg(EVENT_ENABLE_ADVERTISEMENT, NULL);
           EnableAdvertisement();
       }
 
