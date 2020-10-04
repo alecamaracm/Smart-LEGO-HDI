@@ -20,19 +20,22 @@ namespace LEGO_Bridge_WIN
 {
     public static class Program
     {
-        public static readonly byte[] identificationBuffer = { 0x20, 0x69, 0x21 };
-        public static readonly Guid StreamerServiceGUID = new Guid("{f0006969-0451-4000-b000-000000000000}");
+
 
         static BluetoothLEAdvertisementWatcher watcher = new BluetoothLEAdvertisementWatcher();
 
         public static  ConcurrentDictionary<ulong,bool> workingWithMACs = new ConcurrentDictionary<ulong,bool>();
+
+        public static object initializeBrickLock = new object();
+        public static bool initializeBrick = false;
+        public static ulong intializeBrickWithID = 0;
 
         static void Main(string[] args)
         {          
             watcher.Received += OnAdvertisementReceived;
 
             watcher.AdvertisementFilter.Advertisement.DataSections.Add(item: 
-                       new BluetoothLEAdvertisementDataSection() { DataType=0xFF, Data = identificationBuffer.AsBuffer() });
+                       new BluetoothLEAdvertisementDataSection() { DataType=0xFE, Data = SharedFunctions.identificationBuffer.AsBuffer() });
             watcher.ScanningMode = BluetoothLEScanningMode.Passive;
             watcher.Start();
 
@@ -52,32 +55,76 @@ namespace LEGO_Bridge_WIN
             {
                 //We are already working with another advertisement of this brick, just ingore this one
 
+                lock (workingWithMACs)
+                {
+                    if (workingWithMACs.ContainsKey(args.BluetoothAddress)) return;
+                    workingWithMACs.AddOrUpdate(args.BluetoothAddress, true, (a, b) => true);
+                }
+
                 try
                 {
-                    lock (workingWithMACs)
-                    {
-                        if (workingWithMACs.ContainsKey(args.BluetoothAddress)) return;
-                        workingWithMACs.AddOrUpdate(args.BluetoothAddress, true, (a, b) => true);
-                    }
+                    if(brickData.brickID==0)
+                    { //Uninitialized brick
 
-                    var device = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
-                 
-                    var streamerService = await device.GetGattServicesForUuidAsync(StreamerServiceGUID);
-                    if (streamerService.Status == GattCommunicationStatus.Success && streamerService.Services.Count > 0)
-                    {
-                        var streamChar = await streamerService.Services[0].GetCharacteristicsForUuidAsync(StreamerServiceGUID);
-                        if (streamChar.Status == GattCommunicationStatus.Success && streamChar.Characteristics.Count > 0)
-                        {
-                            var data = await streamChar.Characteristics[0].ReadValueAsync();
-                            if (data.Status == GattCommunicationStatus.Success)
+                        if (initializeBrick)
+                        { //Let's initialize a new brick!
+                            initializeBrick = false;
+
+                            var device = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
+                            var services = await device.GetGattServicesAsync();
+                            var streamerService = await device.GetGattServicesForUuidAsync(SharedFunctions.StreamerServiceGUID);
+                            if (streamerService.Status == GattCommunicationStatus.Success && streamerService.Services.Count > 0)
                             {
-                                var streamedData = data.Value.ToArray();
-                                Console.WriteLine("Got streamed data!");
+                                var streamChar = await streamerService.Services[0].GetCharacteristicsForUuidAsync(SharedFunctions.StreamerServiceGUID);
+                                if (streamChar.Status == GattCommunicationStatus.Success && streamChar.Characteristics.Count > 0)
+                                {
+                                    var data = await streamChar.Characteristics[0].ReadValueAsync();
+                                    if (data.Status == GattCommunicationStatus.Success)
+                                    {
+                                        var streamedData = data.Value.ToArray();
+                                        Console.WriteLine("Got streamed data!");
+                                        BridgeNetwork.GotBrickUpdate();
+                                    }
+                                }
                             }
-                        }                        
+                        }
+                        else
+                        {
+                            BridgeNetwork.GotUninitializedBrick(brickData);
+                        }                    
                     }
-                    var aaa = device.ConnectionStatus;
-                    device.Dispose();
+                    else
+                    {
+                        var device = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
+              //          var services = await device.GetGattServicesAsync();
+                        var streamerService = await device.GetGattServicesForUuidAsync(SharedFunctions.StreamerServiceGUID);
+                        if (streamerService.Status == GattCommunicationStatus.Success && streamerService.Services.Count > 0)
+                        {
+                            var streamChar = await streamerService.Services[0].GetCharacteristicsForUuidAsync(SharedFunctions.StreamerServiceGUID);
+                            if (streamChar.Status == GattCommunicationStatus.Success && streamChar.Characteristics.Count > 0)
+                            {
+                                var data = await streamChar.Characteristics[0].ReadValueAsync();
+                                if (data.Status == GattCommunicationStatus.Success)
+                                {
+                                    var streamedData = data.Value.ToArray();
+                                    Console.WriteLine("Got streamed data!");
+                                    BridgeNetwork.GotBrickUpdate();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Failed to read data!");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Failed to get characteristic!");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Failed to get service!");
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {                   
@@ -106,13 +153,13 @@ namespace LEGO_Bridge_WIN
         public static bool IsAdvertisementFromABrick(BluetoothLEAdvertisement advertisement)
         {
             //Most useless advertisements will be dropped here
-            if (advertisement.DataSections.Count != 3 || advertisement.DataSections[1]?.DataType != 255) return false;
+            if (advertisement.DataSections.Count != 3 || advertisement.DataSections[1]?.DataType != 254) return false;
 
             //Check for our magic constants
             var data = advertisement.DataSections[1].Data.ToArray();
-            if (data[0] != identificationBuffer[0]
-                || data[1] != identificationBuffer[1]
-                || data[2] != identificationBuffer[2]) return false;
+            if (data[0] != SharedFunctions.identificationBuffer[0]
+                || data[1] != SharedFunctions.identificationBuffer[1]
+                || data[2] != SharedFunctions.identificationBuffer[2]) return false;
 
             return true;
         }

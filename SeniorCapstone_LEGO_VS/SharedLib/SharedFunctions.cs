@@ -6,19 +6,26 @@ namespace SharedLib
 {
     public static class SharedFunctions
     {
-        public static long[] DecompressLongs(byte[] compressedData)
+        public static readonly byte[] identificationBuffer = { 0x20, 0x69, 0x21 };
+        public static readonly Guid StreamerServiceGUID = new Guid("{f0006969-0451-4000-b000-000000000000}");
+
+        public static int BRIDGE_WS_PORT= 4259;
+
+        public const string BRIDGE_2_BUILDER_DATASTREAM="dataStream";
+
+        public static ulong[] DecompressLongs(byte[] compressedData)
         {
-            List<long> toReturn = new List<long>();
+            List<ulong> toReturn = new List<ulong>();
 
             int pointer = 0;
             while (pointer < compressedData.Length)
             {
-                long toAdd = 0;
+                ulong toAdd = 0;
                 int numberLength = compressedData[pointer];
                 pointer++;
                 for (int i = 0; i < numberLength; i++)
                 {
-                    toAdd += (compressedData[pointer] << (i * 8));
+                    toAdd += (ulong)((ulong)compressedData[pointer] << (i * 8));
                     pointer++;
                 }
                 toReturn.Add(toAdd);
@@ -32,7 +39,7 @@ namespace SharedLib
 
             try
             {
-                long[] decompressedArray = DecompressLongs(advertisement.DataSections[2]);
+                ulong[] decompressedArray = DecompressLongs(advertisement.DataSections[2]);
                 if (decompressedArray.Length != 2) return false;
 
                 brickData.brickID = decompressedArray[0];
@@ -45,6 +52,11 @@ namespace SharedLib
                 Console.Write("Failed to parse brick data! Error: " + ex.Message);
                 return false;
             }
+        }
+
+        public static bool ParseBrickDataFromAdvertisement(object p, out BrickData brickData)
+        {
+            throw new NotImplementedException();
         }
     }
 }

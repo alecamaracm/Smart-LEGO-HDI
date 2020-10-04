@@ -62,6 +62,7 @@
 
 #include "GLOBAL_DEFINES.h"
 
+#include "osal_snv.h"
 #include "bcomdef.h"
 #include <icall_ble_api.h>
 #include "util.h"
@@ -115,7 +116,8 @@ uint8_t CompressLong(unsigned long toCompress,uint8_t * buffer)
 }
 
 unsigned long getBrickID(){
-    unsigned long toWrite=0;
+    return 3;
+    /*unsigned long toWrite=0;
     uint8_t buffer[8];
     int status = osal_snv_read(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)buffer);
 
@@ -131,18 +133,18 @@ unsigned long getBrickID(){
         return toWrite;
     }else{
         return 0;
-    }
+    }*/
 }
 
 void setBrickID(unsigned long idToSet){
-    uint8_t buffer[8];
+   /* uint8_t buffer[8];
     for (int i = 0; i < 8; i++)
     {
         buffer[i] = ((idToSet >> (8 * i)) & 0XFF);
     }
     int status = osal_snv_write(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)buffer);
 
-    Display_printf(dispHandle, 0, 1, "SNV ID WRITE: %lu, status=%d", idToSet,status);
+    Display_printf(dispHandle, 0, 1, "SNV ID WRITE: %lu, status=%d", idToSet,status);*/
 }
 
 

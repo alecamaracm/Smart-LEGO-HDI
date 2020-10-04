@@ -8,8 +8,8 @@ namespace SharedLib
 {
     public class BrickData
     {
-        public long brickID;
-        public long brickType;
+        public ulong brickID;
+        public ulong brickType;
 
         public override string ToString()
         {

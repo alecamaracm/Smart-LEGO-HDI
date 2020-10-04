@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using WebSocketSharp.Server;
 
 namespace LEGO_Builder
 {
@@ -15,13 +16,20 @@ namespace LEGO_Builder
 
         public static bool scanning = false;
 
+        public static WebSocketServer wss;
 
         static void Main(string[] args)
         {
+            wss = new WebSocketServer(SharedFunctions.BRIDGE_WS_PORT);
+            wss.AddWebSocketService<WSBridgeBehavior>("/Bridge");
+            wss.Start();
+
+            Console.WriteLine("Web socket started in port " + SharedFunctions.BRIDGE_WS_PORT);
+
             while (true)
             {
                 ProcessCommand(Console.ReadLine());
-            }
+            }           
         }
 
         public void DoWork()

@@ -315,7 +315,7 @@ static uint8_t advertData[31] =
   //'C',
  // 'K',
   0x04,   // length of this data
-  GAP_ADTYPE_MANUFACTURER_SPECIFIC, //Static string used to recognize this as a brick
+  0xFE, //CANT USE THE RIGHT ONE BC SOME STACKS ONLY ALLOW ONE OF EACH TYPE
   0x20,
   0x69,
   0x21,
@@ -504,7 +504,7 @@ static void SimplePeripheral_init(void)
 
 
   DataStreamerService_AddService();
-  MiscService_AddService();
+ // MiscService_AddService();
 
   //DataStreamerService_SetParameter(DATASTREAMERSERVICE_DATASTREAM, DATASTREAMERSERVICE_DATASTREAM_LEN, );
 

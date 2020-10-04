@@ -71,8 +71,12 @@ static void MainLoop_taskFxn()
 
              SetNewDataStreamEnd();
 
+             do{
+                 Task_sleep(500*100);
+             }while(PIN_getInputValue(PIN_BUTTON)==0);
+
          }
-         Task_sleep(1000*100);
+         Task_sleep(50*100);
      }
 }
 

@@ -198,6 +198,33 @@ Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5sta
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/../_common/cc26xx/_hal_types.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_defs.h
 Application/util.obj: ../Application/GLOBAL_DEFINES.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_snv.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_board_cfg.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_mcu.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_nvic.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_ints.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_types.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/../inc/hw_chip_def.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_gpio.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_memmap.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/systick.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/debug.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/interrupt.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/cpu.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_cpu_scs.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/uart.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_uart.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/flash.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_flash.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_aon_sysctl.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_fcfg1.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/ioc.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_ioc.h
+Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/bcomdef.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/comdef.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
@@ -254,20 +281,6 @@ Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/Board.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/PIN.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/ioc.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_types.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/../inc/hw_chip_def.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_memmap.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_ioc.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_ints.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/interrupt.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_nvic.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/debug.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/cpu.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_cpu_scs.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/l2cap.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_uuid.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_advertiser.h
@@ -277,19 +290,6 @@ Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5sta
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/att.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_profile_uuid.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gattservapp.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_snv.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_board_cfg.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_mcu.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/systick.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/uart.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_uart.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/flash.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_flash.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_aon_sysctl.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_fcfg1.h
-Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_bufmgr.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/rom_jt.h
 Application/util.obj: C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/map_direct.h
@@ -499,6 +499,33 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_com
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/../_common/cc26xx/_hal_types.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/inc/hal_defs.h: 
 ../Application/GLOBAL_DEFINES.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_snv.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_board_cfg.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_mcu.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_nvic.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_ints.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_types.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/../inc/hw_chip_def.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_gpio.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/inc/hw_memmap.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/systick.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/debug.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/interrupt.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/cpu.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_cpu_scs.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/uart.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_uart.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/flash.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_flash.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_aon_sysctl.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_fcfg1.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/ioc.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_ioc.h: 
+C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/bcomdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/comdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
@@ -555,20 +582,6 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/Watchdog.h:
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/Board.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/drivers/PIN.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/ioc.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_types.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/../inc/hw_chip_def.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_memmap.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_ioc.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_ints.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/interrupt.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_nvic.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/debug.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/cpu.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_cpu_scs.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/gpio.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/l2cap.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_uuid.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gap_advertiser.h: 
@@ -578,19 +591,6 @@ C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt.h:
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/att.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gatt_profile_uuid.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/gattservapp.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_snv.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_board_cfg.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_mcu.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/systick.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/uart.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_uart.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/flash.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_flash.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_aon_sysctl.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/devices/cc26x0r2/driverlib/../inc/hw_fcfg1.h: 
-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/osal/src/inc/osal_bufmgr.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/rom_jt.h: 
 C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/inc/../rom/map_direct.h: 
