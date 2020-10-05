@@ -32,6 +32,9 @@ bld/
 [Ll]ogs/
 
 BrickFirmware/V1/App/FlashROM_StackLibrary/
+FlashROM_StackLibrary/
+FlashROM_StackLibrary
+FlashROM_Library/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -347,6 +350,11 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+
+/BrickFirmware/V1/App/FlashROM_StackLibrary/
+FlashROM_StackLibrary/
+
+
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
