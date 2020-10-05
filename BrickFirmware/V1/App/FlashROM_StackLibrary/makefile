@@ -180,7 +180,7 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@$(MAKE) --no-print-directory -Onone "ble5_simple_peripheral_cc2640r2lp_app.out"
 
 dependents:
-	-cd F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library && $(MAKE) clean all
+	-cd F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library && $(MAKE) all
 
 # Tool invocations
 ble5_simple_peripheral_cc2640r2lp_app.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library/ble5_simple_peripheral_cc2640r2lp_stack_library.lib

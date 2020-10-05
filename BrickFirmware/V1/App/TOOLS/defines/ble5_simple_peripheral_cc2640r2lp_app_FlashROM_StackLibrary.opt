@@ -19,4 +19,3 @@
 -DUSE_ICALL
 -Dxdc_runtime_Assert_DISABLE_ALL
 -Dxdc_runtime_Log_DISABLE_ALL
--DOSAL_SNV=2

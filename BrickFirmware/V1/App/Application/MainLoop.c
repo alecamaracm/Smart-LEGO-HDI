@@ -76,7 +76,8 @@ static void MainLoop_taskFxn()
              }while(PIN_getInputValue(PIN_BUTTON)==0);
 
          }
-         Task_sleep(50*100);
+         Task_sleep(1000*100);
+
      }
 }
 

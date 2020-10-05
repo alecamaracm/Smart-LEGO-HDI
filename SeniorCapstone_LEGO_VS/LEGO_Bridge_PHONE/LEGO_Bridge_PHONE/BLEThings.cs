@@ -28,8 +28,8 @@ namespace LEGO_Bridge_PHONE
         public static ConcurrentDictionary<ulong, bool> workingWithMACs = new ConcurrentDictionary<ulong, bool>();
 
         public static object initializeBrickLock = new object();
-        public static bool initializeBrick = false;
-        public static ulong intializeBrickWithID = 0;
+        public static bool initializeBrick = true;
+        public static ulong intializeBrickWithID = 8;
 
         static WebSocket webSocket;
 
@@ -118,23 +118,26 @@ namespace LEGO_Bridge_PHONE
                     if (brickData.brickID == 0)
                     { //Uninitialized brick
 
-                        //if (initializeBrick)
-                        //{ //Let's initialize a new brick!
-                        //    initializeBrick = false;
+                        if (initializeBrick)
+                        { //Let's initialize a new brick!
+                            initializeBrick = false;
 
-                        //    var connection = await ble.ConnectToDevice(
-                        //       peripheral,
-                        //       TimeSpan.FromSeconds(3),
-                        //       progress => Debug.WriteLine(progress)
-                        //    );
-                        //    var aaa= await connection.GattServer.ListServiceCharacteristics(SharedFunctions.StreamerServiceGUID);
-                        //    var data=await connection.GattServer.ReadCharacteristicValue(SharedFunctions.StreamerServiceGUID,SharedFunctions.StreamerServiceGUID);
-                        //    Console.WriteLine("Got streamed data!");
-                        //}
-                        //else
-                        //{
-                        //    //BridgeNetwork.GotUninitializedBrick(brickData);
-                        //}
+                            byte[] array=new byte[8];
+                            for(int i=0;i<8;i++)
+                            {
+                                array[i] = (byte)(intializeBrickWithID >> (8 * i));
+                            }
+
+                            var connection = await ble.ConnectToDevice(peripheral, TimeSpan.FromSeconds(5), progress => Debug.WriteLine(progress));
+
+                            var data = await connection.GattServer.WriteCharacteristicValue(SharedFunctions.MiscServiceGUID, SharedFunctions.MiscServiceIDChar, array);
+                            Console.WriteLine("Brick initialized!");
+
+                        }
+                        else
+                        {
+                            //BridgeNetwork.GotUninitializedBrick(brickData);
+                        }
                     }
                     else
                     {

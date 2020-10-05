@@ -78,6 +78,8 @@
 
 #include <board.h>
 
+#include "GLOBAL_DEFINES.h"
+
 Display_Handle dispHandle;
 //int kimball=0;
 
@@ -423,7 +425,7 @@ void UpdateAdvData(){
 
     int idLength=0;
 
-    idLength=CompressLong(getBrickID(),buffer);
+    idLength=CompressLong(currentBrickID,buffer);
     advertData[initialOffset+length]=idLength;
     memcpy(advertData+initialOffset+length+1, buffer, idLength);
     length+= (1+idLength);
@@ -504,7 +506,7 @@ static void SimplePeripheral_init(void)
 
 
   DataStreamerService_AddService();
- // MiscService_AddService();
+  MiscService_AddService();
 
   //DataStreamerService_SetParameter(DATASTREAMERSERVICE_DATASTREAM, DATASTREAMERSERVICE_DATASTREAM_LEN, );
 
@@ -529,7 +531,7 @@ static void SimplePeripheral_init(void)
   GAP_DeviceInit(GAP_PROFILE_PERIPHERAL, selfEntity, addrMode, NULL);
 
 
-
+  SimplePeripheral_enqueueMsg(EVENT_READ_ID_TO_FLASH, NULL);
 
   Display_printf(dispHandle, SP_ROW_SEPARATOR_1, 0, "====================");
 
@@ -737,11 +739,24 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
        DisableAdvertisement();
        break;
 
+     case EVENT_WRITE_ID_TO_FLASH:
+            setBrickID();
+            break;
+
+     case EVENT_READ_ID_TO_FLASH:
+            getBrickID();
+            UpdateAdvData();
+            break;
+
      case EVENT_UPDATE_BRICKID:
      {
+
          unsigned long newID=0;
          MiscService_GetParameter(MISCSERVICE_SETUPID,&newID);
-         setBrickID(newID);
+
+         Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "UDPATE BRICK ID EVENT. New id: %d", newID);
+         currentBrickID=newID;
+         setBrickID();
 
          DisableAdvertisement();
 

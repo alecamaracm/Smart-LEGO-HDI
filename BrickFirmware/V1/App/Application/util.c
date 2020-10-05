@@ -115,36 +115,37 @@ uint8_t CompressLong(unsigned long toCompress,uint8_t * buffer)
     return buffIndex;
 }
 
-unsigned long getBrickID(){
-    return 3;
-    /*unsigned long toWrite=0;
-    uint8_t buffer[8];
-    int status = osal_snv_read(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)buffer);
+uint8_t flashVNBuffer[8];
 
+unsigned long currentBrickID;
+
+void getBrickID(){
+   // return 3;
+    unsigned long toWrite=0;
+
+
+    Display_printf(dispHandle, 0, 1, "Read start");
+
+    int status = osal_snv_read(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)flashVNBuffer);
+    Display_printf(dispHandle, 0, 1, "Read end");
     for(int i=0;i<8;i++)
     {
-        toWrite+=(((unsigned long)buffer[i])<<(8*i));
+        toWrite+=(((unsigned long)flashVNBuffer[i])<<(8*i));
     }
 
     Display_printf(dispHandle, 0, 1, "SNV ID READ: %lu, status=%d", toWrite,status);
 
-    if(status == SUCCESS)
-    {
-        return toWrite;
-    }else{
-        return 0;
-    }*/
+    currentBrickID=toWrite;
 }
 
-void setBrickID(unsigned long idToSet){
-   /* uint8_t buffer[8];
+void setBrickID(){
     for (int i = 0; i < 8; i++)
     {
-        buffer[i] = ((idToSet >> (8 * i)) & 0XFF);
+        flashVNBuffer[i] = ((currentBrickID >> (8 * i)) & 0xFF);
     }
-    int status = osal_snv_write(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)buffer);
+    int status = osal_snv_write(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)flashVNBuffer);
 
-    Display_printf(dispHandle, 0, 1, "SNV ID WRITE: %lu, status=%d", idToSet,status);*/
+    Display_printf(dispHandle, 0, 1, "SNV ID WRITE: %lu, status=%d", currentBrickID,status);
 }
 
 

@@ -107,8 +107,10 @@ typedef struct
 
 uint8_t CompressLong(unsigned long toCompress,uint8_t * buffer);
 
-unsigned long getBrickID();
-void setBrickID(unsigned long idToSet);
+extern unsigned long currentBrickID;
+
+void getBrickID();
+void setBrickID();
 
 /**
  * @brief   Initialize a TIRTOS Clock instance.

@@ -28,7 +28,7 @@
                 
             </StackLayout>
         </StackLayout>
-        <ScrollView  BackgroundColor="#dddddd" Grid.Row="1">
+        <ScrollView  BackgroundColor="#000000" Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
                 <Label Text="You are ready to go!" TextColor="#ffffff" FontSize="Title"/>
                 <Label Text="1. Connect your PC to the same network as this phone." FontSize="16" Padding="0,0,0,0"/>
@@ -49,7 +49,7 @@
                         Command="{Binding ToggleAction}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
-                <Label Text="{Binding StatusText}" TextColor="#ffffff" Margin="10,4,10,0" BackgroundColor="#ffffff" FontSize="16" Padding="0,0,0,0" HorizontalOptions="Center"/>
+                <Label Text="{Binding StatusText}" TextColor="#000000" Margin="10,4,10,0" BackgroundColor="#ffffff" FontSize="16" Padding="0,0,0,0" HorizontalOptions="Center"/>
                 <Button Margin="0,6,0,0" Text="Learn more"
                         Command="{Binding OpenWebCommand}"
                         BackgroundColor="{StaticResource Primary}"

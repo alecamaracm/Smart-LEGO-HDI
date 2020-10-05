@@ -8,6 +8,8 @@ namespace SharedLib
     {
         public static readonly byte[] identificationBuffer = { 0x20, 0x69, 0x21 };
         public static readonly Guid StreamerServiceGUID = new Guid("{f0006969-0451-4000-b000-000000000000}");
+        public static readonly Guid MiscServiceGUID = new Guid("00006968-0000-1000-8000-00805f9b34fb");
+        public static readonly Guid MiscServiceIDChar = new Guid("f0002626-0451-4000-b000-000000000000");
 
         public static int BRIDGE_WS_PORT= 4259;
 

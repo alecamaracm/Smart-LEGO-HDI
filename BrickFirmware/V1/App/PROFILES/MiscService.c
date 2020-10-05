@@ -337,15 +337,8 @@ static bStatus_t MiscService_WriteAttrCB( uint16 connHandle, gattAttribute_t *pA
   // See if request is regarding the FinishConnection Characteristic Value
   else if ( ! memcmp(pAttr->type.uuid, MiscService_FinishConnectionUUID, pAttr->type.len) )
   {
-    if ( offset + len > MISCSERVICE_FINISHCONNECTION_LEN )
-    {
-      status = ATT_ERR_INVALID_OFFSET;
-    }
-    else
-    {
-        Display_printf(dispHandle,0,0,"Disconnection requested by writing to attribute.");
+        Display_printf(dispHandle,0,1,"Disconnection requested by writing to attribute.");
         GAP_TerminateLinkReq(0x0000, HCI_DISCONNECT_REMOTE_USER_TERM);
-    }
   }
   else
   {
