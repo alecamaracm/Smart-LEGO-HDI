@@ -1,6 +1,6 @@
 #
 # This file was generated based on the configuration script:
-#     D:\School\Cap_Stone_LEGO\github\github2\SeniorCapstone_LEGO\BrickFirmware\V1\App\TOOLS\app_ble.cfg
+#     F:\SeniorCapstone_LEGO\SeniorCapstone_LEGO\BrickFirmware\V1\App\TOOLS\app_ble.cfg
 #
 # This makefile may be included in other makefiles that need to build
 # the libraries containing the compiled source files generated as
@@ -14,7 +14,7 @@
 #
 # The absolute path to the generated source directory (at the time the
 # sources were generated) is:
-#    D:\School\Cap_Stone_LEGO\github\github2\SeniorCapstone_LEGO\BrickFirmware\V1\App\TOOLS\src
+#    F:\SeniorCapstone_LEGO\SeniorCapstone_LEGO\BrickFirmware\V1\App\TOOLS\src
 #
 GEN_SRC_DIR ?= ../TOOLS/src
 
