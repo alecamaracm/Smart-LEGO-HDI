@@ -200,7 +200,7 @@ clean:
 	-@echo ' '
 
 pre-build:
-	-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/../../../tools/ble5stack/lib_search/lib_search    --opt F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/TOOLS/build_config.opt    --lib-dir C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/blelib/cc26x0r2    --cmd F:/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library/lib_linker.cmd    --xml C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/../../../tools/ble5stack/lib_search/lib_search.xml    --sym-dir C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/symbols/cc26x0r2
+	-C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/../../../tools/ble5stack/lib_search/lib_search    --opt D:/School/Cap_Stone_LEGO/github/github2/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/TOOLS/build_config.opt    --lib-dir C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/blelib/cc26x0r2    --cmd D:/School/Cap_Stone_LEGO/github/github2/SeniorCapstone_LEGO/BrickFirmware/V1/SDK/FlashROM_Library/lib_linker.cmd    --xml C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/../../../tools/ble5stack/lib_search/lib_search.xml    --sym-dir C:/ti/simplelink_cc2640r2_sdk_4_20_00_04/source/ti/ble5stack/symbols/cc26x0r2
 	-@echo ' '
 
 .PHONY: all clean dependents

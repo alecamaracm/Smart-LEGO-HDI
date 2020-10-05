@@ -16,6 +16,7 @@
 #include <ti/sysbios/knl/Clock.h>
 #include <ti/sysbios/knl/Event.h>
 #include <ti/sysbios/knl/Queue.h>
+#include <outputShiftDriver.h>
 
 #include <ti/display/Display.h>
 
@@ -27,6 +28,7 @@
 #include "PIN_HELPER.h"
 
 #include "DataStreamerService.h"
+#include <outputShiftDriver.h>
 
 static void MainLoop_taskFxn();
 
@@ -76,7 +78,8 @@ static void MainLoop_taskFxn()
              }while(PIN_getInputValue(PIN_BUTTON)==0);
 
          }
-         Task_sleep(50*100);
+         outputShiftSend();
+         Task_sleep(500*100);
      }
 }
 

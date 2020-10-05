@@ -8,36 +8,42 @@ SHELL = cmd.exe
 C_SRCS += \
 ../Application/MainLoop.c \
 ../Application/PIN_HELPER.c \
+../Application/outputShiftDriver.c \
 ../Application/simple_peripheral.c \
 ../Application/util.c 
 
 C_DEPS += \
 ./Application/MainLoop.d \
 ./Application/PIN_HELPER.d \
+./Application/outputShiftDriver.d \
 ./Application/simple_peripheral.d \
 ./Application/util.d 
 
 OBJS += \
 ./Application/MainLoop.obj \
 ./Application/PIN_HELPER.obj \
+./Application/outputShiftDriver.obj \
 ./Application/simple_peripheral.obj \
 ./Application/util.obj 
 
 OBJS__QUOTED += \
 "Application\MainLoop.obj" \
 "Application\PIN_HELPER.obj" \
+"Application\outputShiftDriver.obj" \
 "Application\simple_peripheral.obj" \
 "Application\util.obj" 
 
 C_DEPS__QUOTED += \
 "Application\MainLoop.d" \
 "Application\PIN_HELPER.d" \
+"Application\outputShiftDriver.d" \
 "Application\simple_peripheral.d" \
 "Application\util.d" 
 
 C_SRCS__QUOTED += \
 "../Application/MainLoop.c" \
 "../Application/PIN_HELPER.c" \
+"../Application/outputShiftDriver.c" \
 "../Application/simple_peripheral.c" \
 "../Application/util.c" 
 

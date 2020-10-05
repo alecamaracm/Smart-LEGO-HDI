@@ -14,6 +14,10 @@
 #define PIN_CHARGING 4
 #define PIN_CHARGED 3
 #define PIN_BUTTON 2
+#define  PIN_O_DT 10
+#define  PIN_O_CLK 9
+#define  PIN_O_LATCH 8
+#define PIN_O_EN 6
 
 extern PIN_State  hStateHui;
 
