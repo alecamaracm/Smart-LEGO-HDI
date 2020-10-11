@@ -29,6 +29,18 @@
 
 #include "DataStreamerService.h"
 #include <outputShiftDriver.h>
+#include "inputShiftDriver.h"
+
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY(byte)  \
+  (byte & 0x80 ? '1' : '0'), \
+  (byte & 0x40 ? '1' : '0'), \
+  (byte & 0x20 ? '1' : '0'), \
+  (byte & 0x10 ? '1' : '0'), \
+  (byte & 0x08 ? '1' : '0'), \
+  (byte & 0x04 ? '1' : '0'), \
+  (byte & 0x02 ? '1' : '0'), \
+  (byte & 0x01 ? '1' : '0')
 
 static void MainLoop_taskFxn();
 
@@ -79,6 +91,18 @@ static void MainLoop_taskFxn()
 
          }
          outputShiftSend();
+
+         counter*=2;
+         if(counter==0){
+             counter=1;
+         }
+         LoadOutputBufferByte(0,0xFF);
+         EnableOutputLEDs();
+
+         inputShiftLoad();
+         uint8_t data=ReadInputBufferByte(0);
+         Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(data));
+
          Task_sleep(500*100);
      }
 }

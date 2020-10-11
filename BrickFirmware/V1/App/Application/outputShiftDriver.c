@@ -1,3 +1,4 @@
+
 /*
  * outputshiftdriver.c
  *
@@ -12,22 +13,17 @@
 #include <ti/drivers/PIN.h>
 #include <stdint.h>
 #include "util.h"
-#define NUMBER_OF_IC_OUTPUT 1;
+#define NUMBER_OF_IC_OUTPUT 1
 
-uint8_t outputShiftData[1]={15};
-
-
-
-
+uint8_t outputShiftData[NUMBER_OF_IC_OUTPUT]={0xFF};
 
 
 void outputShiftSend(){
     Display_printf(dispHandle, 1, 0, "Sending data to output register in outputShiftDriver ");
     PIN_setOutputEnable(&hStateHui, PIN_O_LATCH, 1);
-    PIN_setOutputEnable(&hStateHui, PIN_O_EN, 1);
     PIN_setOutputEnable(&hStateHui, PIN_O_CLK, 1);
-    PIN_setOutputValue(&hStateHui, PIN_O_DT, 1);
-    PIN_setOutputValue(&hStateHui, PIN_O_EN, 0);
+    PIN_setOutputValue(&hStateHui, PIN_O_DT, 0);
+    PIN_setOutputValue(&hStateHui, PIN_O_LATCH, 0);
     int numberOfIC=NUMBER_OF_IC_OUTPUT;
     for(int i=0;i< numberOfIC ;i++)
     {
@@ -45,9 +41,6 @@ void outputShiftSend(){
             }
             PIN_setOutputValue(&hStateHui, PIN_O_CLK, 1);
             PIN_setOutputValue(&hStateHui, PIN_O_CLK, 0);
-            PIN_setOutputValue(&hStateHui, PIN_O_LATCH, 1);
-            PIN_setOutputValue(&hStateHui, PIN_O_LATCH, 0);
-
         }
 
     }
@@ -56,4 +49,22 @@ void outputShiftSend(){
     PIN_setOutputValue(&hStateHui, PIN_O_LATCH, 1);
     PIN_setOutputValue(&hStateHui, PIN_O_LATCH, 0);
 
+}
+
+
+void LoadOutputBufferByte(int byteIndex,uint8_t value){
+    if(byteIndex < sizeof(outputShiftData)){
+        outputShiftData[byteIndex]=value;
+    }else{
+        Display_printf(dispHandle, 1, 0, "Out of bounds output buffer write!");
+    }
+}
+
+void EnableOutputLEDs(){
+    PIN_setOutputEnable(&hStateHui, PIN_O_EN, 1);
+    PIN_setOutputValue(&hStateHui, PIN_O_EN, 0);
+}
+void DisableOutputLEDs(){
+    PIN_setOutputEnable(&hStateHui, PIN_O_EN, 1);
+    PIN_setOutputValue(&hStateHui, PIN_O_EN, 1);
 }
