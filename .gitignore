@@ -358,3 +358,5 @@ FlashROM_StackLibrary/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+BrickFirmware/V1/App/TOOLS/src/makefile.libs
