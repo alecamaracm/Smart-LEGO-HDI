@@ -6,20 +6,23 @@
  *      Author: william
  */
 
-#include <outputShiftDriver.h>
+#include "Drivers/outputShiftDriver.h"
 #include <ti/display/Display.h>
 #include "PIN_HELPER.h"
 #include "PIN_HELPER.h"
 #include <ti/drivers/PIN.h>
 #include <stdint.h>
 #include "util.h"
-#define NUMBER_OF_IC_OUTPUT 1
+#include "GLOBAL_DEFINES.h"
 
 uint8_t outputShiftData[NUMBER_OF_IC_OUTPUT]={0xFF};
 
 
 void outputShiftSend(){
-    Display_printf(dispHandle, 1, 0, "Sending data to output register in outputShiftDriver ");
+#ifdef FULL_DEBUG
+    Display_printf(dispHandle, 1, 0, "Sending data to output register in outputShiftDriver");
+#endif
+
     PIN_setOutputEnable(&hStateHui, PIN_O_LATCH, 1);
     PIN_setOutputEnable(&hStateHui, PIN_O_CLK, 1);
     PIN_setOutputValue(&hStateHui, PIN_O_DT, 0);

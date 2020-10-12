@@ -25,6 +25,7 @@
 #include <ti/drivers/PIN.h>
 #include <stdint.h>
 #include "Application/Drivers/DO_NOT_TOUCH.h"
+#include "GLOBAL_DEFINES.h"
 
 void SendWSUpdate();
 void RGB_LEDs_setAll(uint8_t r,uint8_t g,uint8_t b);
@@ -82,7 +83,7 @@ void WS2812Driver_createTask()
   Task_Params_init(&taskParams);
   taskParams.stack = spTaskStackWS;
   taskParams.stackSize = 1024;
-  taskParams.priority = 3;
+  taskParams.priority = DEFAULT_TASK_PRIORITY;
 
   Task_construct(&spTaskWS, WS2812Driver_taskFxn, &taskParams, NULL);
 }

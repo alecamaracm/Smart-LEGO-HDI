@@ -5,20 +5,24 @@
  *      Author: william
  */
 
-#include <inputShiftDriver.h>
+#include "Drivers/inputShiftDriver.h"
 #include <ti/display/Display.h>
 #include "PIN_HELPER.h"
 #include "PIN_HELPER.h"
 #include <ti/drivers/PIN.h>
 #include <stdint.h>
 #include "util.h"
-#define NUMBER_OF_IC_INPUT 1
+#include "GLOBAL_DEFINES.h"
+
 
 uint8_t inputShiftData[NUMBER_OF_IC_INPUT];
 
 
 void inputShiftLoad(){
-    Display_printf(dispHandle, 1, 0, "Reading data to input register in inputShiftDriver ");
+#ifdef FULL_DEBUG
+    Display_printf(dispHandle, 1, 0, "Reading data to input register in inputShiftDriver");
+#endif
+
     PIN_setOutputEnable(&hStateHui, PIN_I_CLK, 1);
     PIN_setOutputEnable(&hStateHui, PIN_I_LOAD, 1);
     PIN_setOutputValue(&hStateHui, PIN_I_CLK, 0);
@@ -41,9 +45,7 @@ void inputShiftLoad(){
             PIN_setOutputValue(&hStateHui, PIN_I_CLK, 1);
             PIN_setOutputValue(&hStateHui, PIN_I_CLK, 0);
         }
-
     }
-
 }
 
 

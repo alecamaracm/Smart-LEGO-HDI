@@ -77,6 +77,9 @@ icall_userCfg_t user0Cfg = BLE_USER_CFG;
 
 #include "Application/Drivers/WS2812Driver.h"
 #include "Application/MainLoop.h"
+#include "Transceivers/IR_RX.h"
+#include "Transceivers/IR_TX.h"
+
 
 #include "util.h"
 #include "PIN_HELPER.h"
@@ -161,6 +164,8 @@ int main()
   SimplePeripheral_createTask();
   WS2812Driver_createTask();
   MainLoop_createTask();
+  IR_RX_createTask();
+  IR_TX_createTask();
 
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();

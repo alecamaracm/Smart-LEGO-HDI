@@ -16,7 +16,7 @@
 #include <ti/sysbios/knl/Clock.h>
 #include <ti/sysbios/knl/Event.h>
 #include <ti/sysbios/knl/Queue.h>
-#include <outputShiftDriver.h>
+#include "Drivers/outputShiftDriver.h"
 
 #include <ti/display/Display.h>
 
@@ -28,19 +28,11 @@
 #include "PIN_HELPER.h"
 
 #include "DataStreamerService.h"
-#include <outputShiftDriver.h>
-#include "inputShiftDriver.h"
+#include "Drivers/outputShiftDriver.h"
+#include "Drivers/inputShiftDriver.h"
+#include "GLOBAL_DEFINES.h"
 
-#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
-#define BYTE_TO_BINARY(byte)  \
-  (byte & 0x80 ? '1' : '0'), \
-  (byte & 0x40 ? '1' : '0'), \
-  (byte & 0x20 ? '1' : '0'), \
-  (byte & 0x10 ? '1' : '0'), \
-  (byte & 0x08 ? '1' : '0'), \
-  (byte & 0x04 ? '1' : '0'), \
-  (byte & 0x02 ? '1' : '0'), \
-  (byte & 0x01 ? '1' : '0')
+
 
 static void MainLoop_taskFxn();
 
@@ -62,7 +54,7 @@ void MainLoop_createTask()
   Task_Params_init(&taskParams);
   taskParams.stack = spTaskStackML;
   taskParams.stackSize = 1024;
-  taskParams.priority = 3;
+  taskParams.priority = DEFAULT_TASK_PRIORITY;
 
   Task_construct(&spTaskML, MainLoop_taskFxn, &taskParams, NULL);
 }
