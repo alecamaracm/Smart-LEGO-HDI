@@ -360,3 +360,4 @@ FlashROM_StackLibrary/
 .ionide/
 
 BrickFirmware/V1/App/TOOLS/src/makefile.libs
+org.eclipse.core.resources.prefs
