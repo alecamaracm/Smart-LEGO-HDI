@@ -50,9 +50,18 @@
 
 
 
+//RX/TX settings
+#define MSG_BUFFER_SIZE 16
+//RX settings
+#define RX_CLOCK_PERIOD 10 //In ticks
+#define RX_DEBOUNCE_COUNT 5
+//TX settings
+
+
+
 //Calculated constants
-#define NUMBER_OF_IC_INPUT DIV_CEIL(NUMBER_OF_TRANSMITTING_STUDS,8)
-#define NUMBER_OF_IC_OUTPUT DIV_CEIL(NUMBER_OF_RECEIVING_STUDS,8)
+#define NUMBER_OF_IC_OUTPUT DIV_CEIL(NUMBER_OF_TRANSMITTING_STUDS,8)
+#define NUMBER_OF_IC_INPUT DIV_CEIL(NUMBER_OF_RECEIVING_STUDS,8)
 //----------------------------------
 
 
