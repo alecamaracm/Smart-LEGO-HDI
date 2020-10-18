@@ -164,7 +164,7 @@ int main()
   SimplePeripheral_createTask();
   WS2812Driver_createTask();
   MainLoop_createTask();
-  IR_RX_createTask();
+  //IR_RX_createTask();
   IR_TX_createTask();
 
   /* enable interrupts and start SYS/BIOS */

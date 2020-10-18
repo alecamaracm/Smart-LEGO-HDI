@@ -68,7 +68,7 @@ struct IR_RX_stud_state studStates[NUMBER_OF_RECEIVING_STUDS];
 
 Task_Struct spTaskIR_RX;
 #pragma DATA_ALIGN(spTaskStackIR_RX, 8)
-uint8_t spTaskStackIR_RX[1024];
+uint8_t spTaskStackIR_RX[512];
 
 Clock_Struct RXclock;
 
@@ -92,7 +92,7 @@ void IR_RX_createTask()
     // Configure task
     Task_Params_init(&taskParams);
     taskParams.stack = spTaskStackIR_RX;
-    taskParams.stackSize = 1024;
+    taskParams.stackSize = 512;
     taskParams.priority = TRANSCEIVER_TASK_PRIORITY;
 
     Task_construct(&spTaskIR_RX, IR_RX, &taskParams, NULL);
@@ -100,10 +100,10 @@ void IR_RX_createTask()
 
     Clock_Params clockParams;
     Clock_Params_init(&clockParams);
-    clockParams.period = RX_CLOCK_PERIOD;        // 0 is the default, but added for completeness
+    clockParams.period = RXTX_TICK_PERIOD;        // 0 is the default, but added for completeness
     clockParams.startFlag = TRUE;
     clockParams.arg = 'A';
-    Clock_create(IR_RX_DoClockWork, RX_CLOCK_PERIOD, &clockParams, Error_IGNORE);
+    Clock_create(IR_RX_DoClockWork, RXTX_TICK_PERIOD, &clockParams, Error_IGNORE);
 
 }
 

@@ -15,7 +15,7 @@
 #include "util.h"
 #include "GLOBAL_DEFINES.h"
 
-uint8_t outputShiftData[NUMBER_OF_IC_OUTPUT]={0xFF};
+uint8_t outputShiftData[NUMBER_OF_IC_OUTPUT];
 
 
 void outputShiftSend(){

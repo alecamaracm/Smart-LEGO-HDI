@@ -45,18 +45,26 @@
 
 
 //Task priorities
-#define TRANSCEIVER_TASK_PRIORITY 10
+#define TRANSCEIVER_TASK_PRIORITY 4
 #define DEFAULT_TASK_PRIORITY 3
 
 
 
 //RX/TX settings
 #define MSG_BUFFER_SIZE 16
-//RX settings
-#define RX_CLOCK_PERIOD 10 //In ticks
-#define RX_DEBOUNCE_COUNT 5
-//TX settings
+#define RXTX_TICK_PERIOD 15
 
+#define RX_DEBOUNCE_COUNT 4
+#define TX_DEBOUNCE_COUNT RX_DEBOUNCE_COUNT * 2
+
+
+#define MSG_HEADER 0x95
+#define MSG_TYPE_BRICKID 0x1
+#define MSG_RESERVED 0xA
+//RX settings
+
+//TX settings
+#define TX_INTERVAL_MS 500
 
 
 //Calculated constants

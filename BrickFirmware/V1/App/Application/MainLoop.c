@@ -82,18 +82,18 @@ static void MainLoop_taskFxn()
              }while(PIN_getInputValue(PIN_BUTTON)==0);
 
          }
-         outputShiftSend();
+       //  outputShiftSend();
 
-         counter*=2;
-         if(counter==0){
-             counter=1;
-         }
-         LoadOutputBufferByte(0,0xFF);
-         EnableOutputLEDs();
+       //  counter*=2;
+       //  if(counter==0){
+       //      counter=1;
+       //  }
+        // LoadOutputBufferByte(0,0xFF);
+        // EnableOutputLEDs();
 
-         inputShiftLoad();
-         uint8_t data=ReadInputBufferByte(0);
-         Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(data));
+       //  inputShiftLoad();
+       //  uint8_t data=ReadInputBufferByte(0);
+       //  Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(data));
 
          Task_sleep(500*100);
      }
