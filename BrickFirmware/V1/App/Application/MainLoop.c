@@ -64,7 +64,7 @@ static void MainLoop_taskFxn()
 {
      while(true){
    //      Display_printf(dispHandle, 1, 0, "Button status: %d",PIN_getInputValue(PIN_BUTTON));
-         if(PIN_getInputValue(PIN_BUTTON)==0){
+       /*  if(PIN_getInputValue(PIN_BUTTON)==0){
 
              Display_printf(dispHandle, 1, 0, "Button pushed!");
              SetNewDataStreamBegin();
@@ -81,19 +81,20 @@ static void MainLoop_taskFxn()
                  Task_sleep(500*100);
              }while(PIN_getInputValue(PIN_BUTTON)==0);
 
-         }
+         }*/
        //  outputShiftSend();
 
        //  counter*=2;
        //  if(counter==0){
        //      counter=1;
        //  }
-        // LoadOutputBufferByte(0,0xFF);
+       //  LoadOutputBufferByte(0,0xFF);
+       //  outputShiftSend();
         // EnableOutputLEDs();
 
-       //  inputShiftLoad();
-       //  uint8_t data=ReadInputBufferByte(0);
-       //  Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(data));
+   //      inputShiftLoad();
+    //     uint8_t data=ReadInputBufferByte(0);
+    //     Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(data));
 
          Task_sleep(500*100);
      }

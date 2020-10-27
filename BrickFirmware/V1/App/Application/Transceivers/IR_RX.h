@@ -9,7 +9,9 @@
 #define IR_RX_H_
 
 void IR_RX_createTask();
-static void IR_RX_DoClockWork(UArg arg);
-void NewByteReceived(int studIndex);
+extern void IR_RX_DoWork();
+void MessageReceived(int studIndex);
+void IR_RX_Task();
+extern bool IR_RX_isSomethingConnected;
 
 #endif /* APPLICATION_DRIVERS_MAINLOOP_H_ */

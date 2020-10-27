@@ -27,6 +27,8 @@
 #include "Application/Drivers/DO_NOT_TOUCH.h"
 #include "GLOBAL_DEFINES.h"
 
+#include "Transceivers/IR_RX.h"
+
 void SendWSUpdate();
 void RGB_LEDs_setAll(uint8_t r,uint8_t g,uint8_t b);
 void UpdateCurrentRGBAnimation();
@@ -36,6 +38,7 @@ typedef enum RGB_LEDS_STATE {
     OFF,
     CHARGING,
     CHARGED,
+    BRICK_CONNECTED,
     PARTY,
 } RGB_LEDS_STATE;
 
@@ -63,7 +66,7 @@ uint8_t WSsendBuffer[(LED_NUMBER*3)];
 uint8_t WSOutputData[(LED_NUMBER*3)];
 
 
-#define RGB_LED_ANIMATION_INTERVAL_MS 50
+#define RGB_LED_ANIMATION_INTERVAL_MS 30
 int animationMultiplierCount=1000;
 #define RGB_STATUS_SELECT_INTERVAL_MULTIPLIER 10
 int rgbStatusIntervalMultiplierCount=1000;
@@ -145,6 +148,9 @@ void UpdateCurrentRGBState(){
             Display_printf(dispHandle, 1, 0, "Charging complete!");
             rgbState=CHARGED;
         }
+        if(IR_RX_isSomethingConnected) {
+            rgbState=BRICK_CONNECTED;
+        }
         break;
     }
     case CHARGING:
@@ -152,11 +158,22 @@ void UpdateCurrentRGBState(){
             Display_printf(dispHandle, 1, 0, "Charging stopped!");
             rgbState=OFF;
         }
+        if(IR_RX_isSomethingConnected) {
+                    rgbState=BRICK_CONNECTED;
+        }
         break;
     case CHARGED:
         if(PIN_getInputValue(PIN_CHARGED)==1){
             Display_printf(dispHandle, 1, 0, "Charging stopped!");
             rgbState=OFF;
+        }
+        if(IR_RX_isSomethingConnected) {
+            rgbState=BRICK_CONNECTED;
+        }
+        break;
+    case BRICK_CONNECTED:
+        if(!IR_RX_isSomethingConnected) {
+             rgbState=OFF;
         }
         break;
     default:
@@ -197,6 +214,12 @@ void UpdateCurrentRGBAnimation()
         WSOutputData[LED_NUMBER*3-1]=temp;
         break;
     }
+    case BRICK_CONNECTED:
+    {
+        RGB_LEDs_setAll(0,0,255);
+        break;
+    }
+
     default:
          break;
     }
@@ -206,10 +229,22 @@ void UpdateCurrentRGBAnimation()
     {
         if(fadeUp)
         {
-            brigthness+=0.01f;
+            brigthness+=0.008f;
             if(brigthness>0.15f) fadeUp=false;
         }else{
-            brigthness-=0.01f;
+            brigthness-=0.008f;
+            if(brigthness<0.025f) fadeUp=true;
+        }
+    }
+
+    if(rgbState==BRICK_CONNECTED)
+    {
+        if(fadeUp)
+        {
+            brigthness+=0.015f;
+            if(brigthness>0.35f) fadeUp=false;
+        }else{
+            brigthness-=0.015f;
             if(brigthness<0.025f) fadeUp=true;
         }
     }

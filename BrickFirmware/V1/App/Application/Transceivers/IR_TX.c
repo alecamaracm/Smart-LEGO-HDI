@@ -66,10 +66,10 @@ static void IR_TX()
 {
 
      while(true){
-
-#ifdef FULL_DEBUG
-         Display_printf(dispHandle, 1, 0, "Starting to send IR data");
-#endif
+    //     Display_printf(dispHandle, 1, 0, "Starting to send IR datass");
+//#ifdef FULL_DEBUG
+        // Display_printf(dispHandle, 1, 0, "Starting to send IR data");
+//#endif
 
          //Set TX LEDs to 0 and enable them
          for(int k=0;k<NUMBER_OF_IC_OUTPUT;k++){
@@ -105,7 +105,7 @@ static void IR_TX()
 
          for(int i=0;i<3;i++){
              for(int k=0;k<NUMBER_OF_TRANSMITTING_STUDS;k++){
-                 studsSendingByteBuffer[k]=(k>>((2-i)*8));
+                studsSendingByteBuffer[k]=(k>>((2-i)*8));
              }
 
              SendIndividually(studsSendingByteBuffer, studsCRCByteBuffer);
