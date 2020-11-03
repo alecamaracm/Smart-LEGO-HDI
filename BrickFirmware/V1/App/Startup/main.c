@@ -161,7 +161,7 @@ int main()
 
   dispHandle = Display_open(Display_Type_ANY, NULL);
 
-  //SimplePeripheral_createTask();
+  SimplePeripheral_createTask();
   WS2812Driver_createTask();
   MainLoop_createTask();
   IR_RX_createTask();

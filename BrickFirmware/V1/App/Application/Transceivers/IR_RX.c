@@ -62,6 +62,7 @@ struct IR_RX_stud_state{
     //CVS
     bool newDataReady;
     bool disconnectedEvent;
+    bool bleChange;
 
     //STUD CONNECTION DATA
     uint8_t connectedBrickID[6];
@@ -94,6 +95,7 @@ void IR_RX_createTask()
         studStates[i].disconnectionTimeout=0;
         studStates[i].newDataReady=false;
         studStates[i].disconnectedEvent=false;
+        studStates[i].bleChange=false;
     }
 
 
@@ -114,7 +116,7 @@ void IR_RX_createTask()
     clockParams.period = RXTX_TICK_PERIOD;
     clockParams.startFlag = TRUE;
     clockParams.arg = 'B';
-    Clock_create(IR_RX,100 , &clockParams, Error_IGNORE);
+    Clock_create(IR_RX,RXTX_TICK_PERIOD*2 , &clockParams, Error_IGNORE);
 
 }
 
@@ -123,17 +125,24 @@ void IR_RX_Task()
     while(true) {
 
         bool somethingChanged=false;
+        bool thereIsBLEPendingData=false;
         // Do message processing outside the critical section
         for(int i=0;i<NUMBER_OF_RECEIVING_STUDS;i++){
             if(studStates[i].newDataReady) {
                 MessageReceived(i);
                 studStates[i].newDataReady=false;
                 somethingChanged=true;
+                studStates[i].bleChange=true;
             }
             if(studStates[i].disconnectedEvent){
                 Display_printf(dispHandle, 1, 0,"Stud %d disconnected!",i);
                 studStates[i].disconnectedEvent=false;
                 somethingChanged=true;
+                studStates[i].bleChange=true;
+            }
+            if(studStates[i].bleChange)
+            {
+                thereIsBLEPendingData=true;
             }
         }
 
@@ -147,7 +156,24 @@ void IR_RX_Task()
             }
             IR_RX_isSomethingConnected=somethingConnected;
         }
-        Task_sleep(35*100);
+
+        if(thereIsBLEPendingData){
+            if(dataStreamReady==false) //We are not advertising or sending advertisements
+            {
+                //No need to call SetNewDataStreamBegin to disable ads bc they are already disabled (streamDataReady=false)
+                if(CreateBLEStream()){
+                    SetNewDataStreamEnd(); //Enable ads
+                    Display_printf(dispHandle, 1, 0,"New BLE stream packet activated from the RX loop.");
+                }else{
+                    //Should never get here
+                    Display_printf(dispHandle, 1, 0,"There is pending data but CreateBLEStream did not return true!");
+                }
+            }else{
+                Display_printf(dispHandle, 1, 0,"New BLE stream deltas are ready but there is a pending stream!");
+            }
+        }
+
+        Task_sleep(500*100);
     }
 }
 
@@ -156,8 +182,8 @@ void IR_RX_Task()
  */
 void IR_RX_DoWork()
 {
-    PIN_setOutputEnable(&hStateHui, PIN_BUTTON, 1);
-    PIN_setOutputValue(&hStateHui, PIN_BUTTON, 1);
+  //  PIN_setOutputEnable(&hStateHui, PIN_BUTTON, 1);
+   // PIN_setOutputValue(&hStateHui, PIN_BUTTON, 1);
 
     inputShiftLoad(); //Load current RX stud data into buffer.
     uint8_t data=ReadInputBufferByte(0);
@@ -183,7 +209,7 @@ void IR_RX_DoWork()
             if(currentStud->disconnectionTimeout>1)currentStud->disconnectionTimeout--;
         }
 
-        uint8_t studValue=(ReadInputBufferByte(NUMBER_OF_RECEIVING_STUDS/8)>>(7-i)) & 0x01;
+        uint8_t studValue=(ReadInputBufferByte(i/8)>>(7-i)) & 0x01;
 
         // if(i==0) PIN_setOutputValue(&hStateHui, PIN_BUTTON, studValue);
 
@@ -286,7 +312,7 @@ void IR_RX_DoWork()
         }
     }
 
-    PIN_setOutputValue(&hStateHui, PIN_BUTTON, 0);
+   // PIN_setOutputValue(&hStateHui, PIN_BUTTON, 0);
 }
 
 void Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t length){
@@ -395,6 +421,40 @@ static void IR_RX(UArg arg1)
     //      Display_printf(dispHandle, 1, 0, "Button status: %d",PIN_getInputValue(PIN_BUTTON));
     //Task_sleep(RXTX_TICK_PERIOD);
     //       Clock_tickPeriod
+
+}
+
+bool CreateBLEStream(){
+
+    dataStreamCurrentLength=0;
+
+    for(int i=0;i<NUMBER_OF_RECEIVING_STUDS;i++){
+
+        if(studStates[i].bleChange)
+        {
+            //If the current packet won't fit in the stream anymore, just break and don´t send any more that
+            if(dataStreamCurrentLength+13 >=DATASTREAM_MAX_LENGTH) break;
+            //This is not completely efficient in terms of data per BLE stream, but it might help save CPU cycles with a long # of studs.
+
+            dataStreamOutputBuffer[dataStreamCurrentLength]=BLE_DELTA_TYPE_BASIC;
+
+            //Remote MAC
+            memcpy(dataStreamOutputBuffer+1, studStates[i].connectedBrickID, 6);
+
+            //Local stud
+            for(int i=0;i<3;i++) {
+                dataStreamOutputBuffer[dataStreamCurrentLength+1+6+i]=(uint8_t)(i>>((2-i)*8));
+            }
+
+            //Local stud
+            memcpy(dataStreamOutputBuffer+1+6+3, studStates[i].connectedBrickStudID, 3);
+
+            dataStreamCurrentLength+=13;
+            studStates[i].bleChange=false; //We processed this stud change
+        }
+    }
+
+    return dataStreamCurrentLength>0;
 
 }
 

@@ -42,7 +42,7 @@ static void MainLoop_taskFxn();
 
 Task_Struct spTaskML;
 #pragma DATA_ALIGN(spTaskStackML, 8)
-uint8_t spTaskStackML[1024];
+uint8_t spTaskStackML[512];
 
 uint8_t counter=1;
 
@@ -53,7 +53,7 @@ void MainLoop_createTask()
   // Configure task
   Task_Params_init(&taskParams);
   taskParams.stack = spTaskStackML;
-  taskParams.stackSize = 1024;
+  taskParams.stackSize = 512;
   taskParams.priority = DEFAULT_TASK_PRIORITY;
 
   Task_construct(&spTaskML, MainLoop_taskFxn, &taskParams, NULL);
@@ -64,7 +64,7 @@ static void MainLoop_taskFxn()
 {
      while(true){
    //      Display_printf(dispHandle, 1, 0, "Button status: %d",PIN_getInputValue(PIN_BUTTON));
-       /*  if(PIN_getInputValue(PIN_BUTTON)==0){
+         if(PIN_getInputValue(PIN_BUTTON)==0){
 
              Display_printf(dispHandle, 1, 0, "Button pushed!");
              SetNewDataStreamBegin();
@@ -81,7 +81,7 @@ static void MainLoop_taskFxn()
                  Task_sleep(500*100);
              }while(PIN_getInputValue(PIN_BUTTON)==0);
 
-         }*/
+         }
        //  outputShiftSend();
 
        //  counter*=2;

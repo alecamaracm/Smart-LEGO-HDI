@@ -96,6 +96,10 @@ extern bStatus_t DataStreamerService_AddService( void );
 extern void SetNewDataStreamBegin();
 extern bStatus_t SetNewDataStreamEnd();
 
+extern uint8_t dataStreamOutputBuffer[DATASTREAM_MAX_LENGTH];
+extern bool dataStreamReady;
+extern int dataStreamCurrentLength;
+
 /*********************************************************************
 *********************************************************************/
 

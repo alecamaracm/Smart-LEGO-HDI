@@ -55,7 +55,7 @@ uint8_t RGB_LEDS_ANIMS_INTERVAL_MULTIPLER[] = {
 
 Task_Struct spTaskWS;
 #pragma DATA_ALIGN(spTaskStackWS, 8)
-uint8_t spTaskStackWS[1024];
+uint8_t spTaskStackWS[512];
 
 
 
@@ -85,7 +85,7 @@ void WS2812Driver_createTask()
   // Configure task
   Task_Params_init(&taskParams);
   taskParams.stack = spTaskStackWS;
-  taskParams.stackSize = 1024;
+  taskParams.stackSize = 512;
   taskParams.priority = DEFAULT_TASK_PRIORITY;
 
   Task_construct(&spTaskWS, WS2812Driver_taskFxn, &taskParams, NULL);

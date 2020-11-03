@@ -90,7 +90,7 @@ CONST uint8_t DataStreamerService_DataStreamUUID[ATT_UUID_SIZE] =
 /*********************************************************************
  * LOCAL VARIABLES
  */
-uint8_t dataStreamOutputBuffer[DATASTREAM_MAX_LENGTH] = {0};
+uint8_t dataStreamOutputBuffer[DATASTREAM_MAX_LENGTH];
 bool dataStreamReady=false;
 int dataStreamCurrentLength=0;
 

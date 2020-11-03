@@ -80,6 +80,8 @@
 
 #include "GLOBAL_DEFINES.h"
 
+#include "Transceivers/IR_RX.h"
+
 Display_Handle dispHandle;
 //int kimball=0;
 
@@ -798,6 +800,8 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
 bStatus_t EnableAdvertisement(){
     //DisableAdvertisement();
     //UpdateAdvData();
+
+
     return GapAdv_enable(advHandleLegacy, GAP_ADV_ENABLE_OPTIONS_USE_MAX , 0);
 }
 
@@ -899,13 +903,12 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
 
       Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Device Disconnected!");
 
-      // If dataStream is still ready, enable advertisements again after disconnect
+      // If dataStream is still ready, enable advertisements again after disconnect (Device disconnected in the middle of the transfer?
       if(dataStreamReady)
       {
           //SimplePeripheral_enqueueMsg(EVENT_ENABLE_ADVERTISEMENT, NULL);
           EnableAdvertisement();
       }
-
 
       break;
     }

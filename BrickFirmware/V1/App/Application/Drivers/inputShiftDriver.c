@@ -53,7 +53,7 @@ uint8_t ReadInputBufferByte(int byteIndex){
     if(byteIndex < sizeof(inputShiftData)){
         return inputShiftData[byteIndex];
     }else{
-        Display_printf(dispHandle, 1, 0, "Out of bounds input buffer read!");
+        Display_printf(dispHandle, 1, 0, "Out of bounds input buffer read at index %d!",byteIndex);
         return 0;
     }
 }
