@@ -427,9 +427,9 @@ void UpdateAdvData(){
 
     int idLength=0;
 
-    idLength=CompressLong(currentBrickID,buffer);
+    idLength=6;
     advertData[initialOffset+length]=idLength;
-    memcpy(advertData+initialOffset+length+1, buffer, idLength);
+    memcpy(advertData+initialOffset+length+1, currentBrickID, idLength);
     length+= (1+idLength);
 
     idLength=CompressLong(BRICK_TYPE,buffer);
@@ -742,11 +742,9 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
        break;
 
      case EVENT_WRITE_ID_TO_FLASH:
-            setBrickID();
             break;
 
      case EVENT_READ_ID_TO_FLASH:
-            getBrickID();
             UpdateAdvData();
             break;
 
@@ -757,8 +755,7 @@ static void SimplePeripheral_processAppMsg(spEvt_t *pMsg)
          MiscService_GetParameter(MISCSERVICE_SETUPID,&newID);
 
          Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "UDPATE BRICK ID EVENT. New id: %d", newID);
-         currentBrickID=newID;
-         setBrickID();
+     //    currentBrickID=newID;
 
          DisableAdvertisement();
 
@@ -828,6 +825,9 @@ static void SimplePeripheral_processGapMessage(gapEventHdr_t *pMsg)
 
       if(pPkt->hdr.status == SUCCESS)
       {
+          memcpy(currentBrickID,pPkt->devAddr,6);
+          currentBrickIDSet=true;
+          UpdateAdvData();
 
         Display_printf(dispHandle, SP_ROW_STATUS_1, 0, "Initialized");
 

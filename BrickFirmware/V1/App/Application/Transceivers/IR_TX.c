@@ -89,9 +89,8 @@ static void IR_TX()
          tempCRC+=SendShared(MSG_TYPE_BRICKID<<4 | MSG_RESERVED);
 
          //Data bytes
-         long macToSend=10;
          for(int i=0;i<6;i++){
-             tempCRC+=SendShared((macToSend >> ((5-i)*8)) & 0xFF);
+             tempCRC+=SendShared(currentBrickID[i]);
          }
          //Data bytes
          int brickTypeToSend=BRICK_TYPE;

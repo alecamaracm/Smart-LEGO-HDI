@@ -26,7 +26,8 @@ namespace LEGO_Builder
             {
                 case SharedFunctions.BRIDGE_2_BUILDER_DATASTREAM:
                     var receivedData = JsonConvert.DeserializeObject<AdvertisementTransferClass>(e.Data.Substring(e.Data.IndexOf("|")+1));
-                    Console.WriteLine("Received stream data from bick: " + receivedData.brickData.ToString());
+                    receivedData.ParsePacket();
+                    Console.WriteLine("Received stream data from bick: " + receivedData);
                     break;
                 default:
                     Console.WriteLine("Found unknown BRIDGE_2_BUILDER data type!");

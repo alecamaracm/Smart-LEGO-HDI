@@ -13,7 +13,7 @@
 
 void IR_RX_createTask();
 extern void IR_RX_DoWork();
-void MessageReceived(int studIndex);
+bool MessageReceived(int studIndex);
 void IR_RX_Task();
 extern bool IR_RX_isSomethingConnected;
 

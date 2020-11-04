@@ -25,7 +25,7 @@ namespace LEGO_Bridge_PHONE
         public static IBluetoothLowEnergyAdapter ble;
         static CancellationTokenSource cts;
 
-        public static ConcurrentDictionary<ulong, bool> workingWithMACs = new ConcurrentDictionary<ulong, bool>();
+        public static ConcurrentDictionary<ulong, DateTime> workingWithMACs = new ConcurrentDictionary<ulong, DateTime>();
 
         public static object initializeBrickLock = new object();
         public static bool initializeBrick = true;
@@ -109,8 +109,18 @@ namespace LEGO_Bridge_PHONE
                 lock (workingWithMACs)
                 {
                     Console.WriteLine("Found brick!");
-                    if (workingWithMACs.ContainsKey(address)) return;
-                    workingWithMACs.AddOrUpdate(address, true, (a, b) => true);
+                    if (workingWithMACs.ContainsKey(address))
+                    {
+                        if((DateTime.UtcNow-workingWithMACs[address]).TotalSeconds>10)
+                        {
+                            workingWithMACs.TryRemove(address, out DateTime nullll);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    workingWithMACs.AddOrUpdate(address, DateTime.UtcNow, (a, b) => DateTime.UtcNow);
                 }
 
                 try
@@ -178,7 +188,7 @@ namespace LEGO_Bridge_PHONE
                 {
                     lock (workingWithMACs)
                     {
-                        workingWithMACs.TryRemove(address, out bool a);
+                        workingWithMACs.TryRemove(address, out DateTime a);
                     }
                 }
             }

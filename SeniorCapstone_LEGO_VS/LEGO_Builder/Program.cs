@@ -20,6 +20,13 @@ namespace LEGO_Builder
 
         static void Main(string[] args)
         {
+            var stream = new AdvertisementTransferClass();
+            stream.dataStream =new byte[]{ 0,0,0,0,0,0,10,0,0,1,0,0,3,
+                0, 0, 0, 0, 0, 0, 12, 0, 0, 3, 0, 1, 3 };
+            stream.ParsePacket();
+            Console.Write(stream);
+    
+
             wss = new WebSocketServer(SharedFunctions.BRIDGE_WS_PORT);
             wss.AddWebSocketService<WSBridgeBehavior>("/Bridge");
             wss.Start();

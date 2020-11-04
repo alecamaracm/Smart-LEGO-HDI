@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SharedLib
@@ -43,6 +44,7 @@ namespace SharedLib
             {
                 ulong[] decompressedArray = DecompressLongs(advertisement.DataSections[2]);
                 if (decompressedArray.Length != 2) return false;
+
 
                 brickData.brickID = decompressedArray[0];
                 brickData.brickType = decompressedArray[1];

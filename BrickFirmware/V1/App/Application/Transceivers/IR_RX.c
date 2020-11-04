@@ -129,10 +129,12 @@ void IR_RX_Task()
         // Do message processing outside the critical section
         for(int i=0;i<NUMBER_OF_RECEIVING_STUDS;i++){
             if(studStates[i].newDataReady) {
-                MessageReceived(i);
+                if(MessageReceived(i)) {
+                    //If something changed, recalculate lights later and set the ble delta ready flag
+                    somethingChanged=true;
+                    studStates[i].bleChange=true;
+                }
                 studStates[i].newDataReady=false;
-                somethingChanged=true;
-                studStates[i].bleChange=true;
             }
             if(studStates[i].disconnectedEvent){
                 Display_printf(dispHandle, 1, 0,"Stud %d disconnected!",i);
@@ -157,7 +159,7 @@ void IR_RX_Task()
             IR_RX_isSomethingConnected=somethingConnected;
         }
 
-        if(thereIsBLEPendingData){
+        if(thereIsBLEPendingData && currentBrickIDSet){
             if(dataStreamReady==false) //We are not advertising or sending advertisements
             {
                 //No need to call SetNewDataStreamBegin to disable ads bc they are already disabled (streamDataReady=false)
@@ -315,7 +317,8 @@ void IR_RX_DoWork()
    // PIN_setOutputValue(&hStateHui, PIN_BUTTON, 0);
 }
 
-void Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t length){
+//Returns true if something changed
+bool Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t length){
 
     struct IR_RX_stud_state  * currentStud=&studStates[studIndex];
     //  Display_printf(dispHandle, 1, 0, "BrickID message received at stud %d",studIndex);
@@ -345,6 +348,7 @@ void Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t leng
 
         for(int i=0;i<6;i++){
             newID|=startOfData[i]<< ((5-i)*8);
+          //  currentStud->connectedBrickID[i]=startOfData[i];
         }
 
         newBrickType=(startOfData[6]<<16) + (startOfData[6+1]<<8)+(startOfData[6+2]);
@@ -365,12 +369,19 @@ void Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t leng
         memcpy(currentStud->connectedBrickID,startOfData,6);
         memcpy(currentStud->connectedBrickType,startOfData+6,3);
         memcpy(currentStud->connectedBrickStudID,startOfData+9,3);
+
+        currentStud->disconnectionTimeout=TICKS_TO_TIMEOUT;
+        return true;
+    }else{
+        currentStud->disconnectionTimeout=TICKS_TO_TIMEOUT;
+        return false;
     }
 
-    currentStud->disconnectionTimeout=TICKS_TO_TIMEOUT;
+
 }
 
-void MessageReceived(int studIndex){
+//Returns true if something changed
+bool MessageReceived(int studIndex){
     struct IR_RX_stud_state  * currentStud=&studStates[studIndex];
 
     /* Display_printf(dispHandle, 1, 0, "EOM at %d:",studIndex);
@@ -381,7 +392,7 @@ void MessageReceived(int studIndex){
     //Check header
     if(currentStud->buffer[0]!=MSG_HEADER) {
         // Display_printf(dispHandle, 1, 0, "Wrong message header at stud %d",studIndex);
-        return;
+        return false;
     }
 
     //Check the checksum
@@ -392,20 +403,20 @@ void MessageReceived(int studIndex){
     uint8_t gotChecksum=currentStud->buffer[currentStud->lastBytePosition-1];
     if(myChecksum!=gotChecksum){
         //  Display_printf(dispHandle, 1, 0, "Wrong checksum at stud %d. Calculated: %d, Received: %d",studIndex,myChecksum,gotChecksum);
-        return;
+        return false;
     }
 
     //Check the reserved bits
     if(currentStud->buffer[1] & 0x0F != MSG_RESERVED){
         // Display_printf(dispHandle, 1, 0, "Wrong reserved part of byte 1 at stud %d",studIndex);
-        return;
+        return false;
     }
 
     //Call the right helper method depending on the message type
     uint8_t messageType=(currentStud->buffer[1] >> 4);
     switch(messageType){
     case MSG_TYPE_BRICKID:
-        Message_BRICKID_Received(studIndex, currentStud->buffer+2, currentStud->lastBytePosition-3);
+        return Message_BRICKID_Received(studIndex, currentStud->buffer+2, currentStud->lastBytePosition-3);
         break;
     default:
         //  Display_printf(dispHandle, 1, 0, "Unknown message type at stud %d",studIndex);
@@ -428,28 +439,52 @@ bool CreateBLEStream(){
 
     dataStreamCurrentLength=0;
 
+    for(int i=0;i<DATASTREAM_MAX_LENGTH;i++)dataStreamOutputBuffer[i]=0;
+
+
     for(int i=0;i<NUMBER_OF_RECEIVING_STUDS;i++){
 
-        if(studStates[i].bleChange)
+        if(studStates[i].bleChange==true)
         {
-            //If the current packet won't fit in the stream anymore, just break and don´t send any more that
-            if(dataStreamCurrentLength+13 >=DATASTREAM_MAX_LENGTH) break;
             //This is not completely efficient in terms of data per BLE stream, but it might help save CPU cycles with a long # of studs.
 
-            dataStreamOutputBuffer[dataStreamCurrentLength]=BLE_DELTA_TYPE_BASIC;
+            if(studStates[i].disconnectionTimeout==0) {
 
-            //Remote MAC
-            memcpy(dataStreamOutputBuffer+1, studStates[i].connectedBrickID, 6);
+                //If the current packet won't fit in the stream anymore, just break and don´t send any more that
+                if(dataStreamCurrentLength+4 >=DATASTREAM_MAX_LENGTH) break;
 
-            //Local stud
-            for(int i=0;i<3;i++) {
-                dataStreamOutputBuffer[dataStreamCurrentLength+1+6+i]=(uint8_t)(i>>((2-i)*8));
+
+                //Stud is disconnected
+                dataStreamOutputBuffer[dataStreamCurrentLength]=BLE_DELTA_TYPE_BASIC_DISCONNECTED;
+
+               //Local stud
+               for(int k=0;k<3;k++) {
+                   dataStreamOutputBuffer[dataStreamCurrentLength+1+k]=(uint8_t)(i>>((2-k)*8));
+               }
+
+               dataStreamCurrentLength+=4;
+            }else{
+
+                //If the current packet won't fit in the stream anymore, just break and don´t send any more that
+                if(dataStreamCurrentLength+13 >=DATASTREAM_MAX_LENGTH) break;
+
+                //Stud connnected or changed
+                dataStreamOutputBuffer[dataStreamCurrentLength]=BLE_DELTA_TYPE_BASIC_CONNECTED;
+
+               //Remote MAC
+               memcpy(dataStreamOutputBuffer+dataStreamCurrentLength+1, studStates[i].connectedBrickID, 6);
+
+               //Local stud
+               for(int k=0;k<3;k++) {
+                   dataStreamOutputBuffer[dataStreamCurrentLength+1+6+k]=(uint8_t)(i>>((2-k)*8));
+               }
+
+               //Remote stud
+               memcpy(dataStreamOutputBuffer+dataStreamCurrentLength+1+6+3, studStates[i].connectedBrickStudID, 3);
+
+               dataStreamCurrentLength+=13;
             }
 
-            //Local stud
-            memcpy(dataStreamOutputBuffer+1+6+3, studStates[i].connectedBrickStudID, 3);
-
-            dataStreamCurrentLength+=13;
             studStates[i].bleChange=false; //We processed this stud change
         }
     }

@@ -99,17 +99,22 @@ typedef struct _queueRec_
 // The output buffer must be at least (long) bytes long!
 // Compressed a long into a NON_ZERO_BYTES byte array.
 // Returns the length of the NON_ZERO bytes
-uint8_t CompressLong(unsigned long toCompress,uint8_t * buffer)
+uint8_t CompressLong(long toCompress,uint8_t * buffer)
 {
+    Display_printf(dispHandle, 1, 0, "Starting to compress: %li",toCompress);
     int buffIndex=0;
     while(toCompress>0)
     {
         //Save the first 8 bits of the number
         buffer[buffIndex]=(uint8_t)toCompress;
+        Display_printf(dispHandle, 1, 0, "Done byte: %d",(int32_t)(uint8_t)toCompress);
         //Get rid of the used bits
         toCompress=toCompress>>8;
         buffIndex++;
+
     }
+
+    Display_printf(dispHandle, 1, 0, "Compression finished with %d bytes",buffIndex);
 
     //Return the byte count
     return buffIndex;
@@ -117,36 +122,8 @@ uint8_t CompressLong(unsigned long toCompress,uint8_t * buffer)
 
 uint8_t flashVNBuffer[8];
 
-unsigned long currentBrickID;
-
-void getBrickID(){
-   // return 3;
-    unsigned long toWrite=0;
-
-
-    Display_printf(dispHandle, 0, 1, "Read start");
-
-    int status = osal_snv_read(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)flashVNBuffer);
-    Display_printf(dispHandle, 0, 1, "Read end");
-    for(int i=0;i<8;i++)
-    {
-        toWrite+=(((unsigned long)flashVNBuffer[i])<<(8*i));
-    }
-
-    Display_printf(dispHandle, 0, 1, "SNV ID READ: %lu, status=%d", toWrite,status);
-
-    currentBrickID=toWrite;
-}
-
-void setBrickID(){
-    for (int i = 0; i < 8; i++)
-    {
-        flashVNBuffer[i] = ((currentBrickID >> (8 * i)) & 0xFF);
-    }
-    int status = osal_snv_write(BRICK_ID_FLASH_NV_ID, 8, (uint8 *)flashVNBuffer);
-
-    Display_printf(dispHandle, 0, 1, "SNV ID WRITE: %lu, status=%d", currentBrickID,status);
-}
+uint8_t currentBrickID[6]={0,0,0,0,0,0};
+bool currentBrickIDSet=false;
 
 
 

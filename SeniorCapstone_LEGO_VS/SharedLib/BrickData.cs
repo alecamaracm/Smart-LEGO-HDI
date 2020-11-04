@@ -13,7 +13,7 @@ namespace SharedLib
 
         public override string ToString()
         {
-            return $"brickID={brickID}, brickType={brickType}";
+            return $"brickID={brickID.ToString("X6")}, brickType={brickType}";
         }
     }
 }
