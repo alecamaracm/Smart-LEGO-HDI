@@ -184,25 +184,15 @@ void IR_RX_Task()
  */
 void IR_RX_DoWork()
 {
-  //  PIN_setOutputEnable(&hStateHui, PIN_BUTTON, 1);
-   // PIN_setOutputValue(&hStateHui, PIN_BUTTON, 1);
-
     inputShiftLoad(); //Load current RX stud data into buffer.
     uint8_t data=ReadInputBufferByte(0);
 
-
-
-
-    //Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(data));
 
     for(int i=0;i<NUMBER_OF_RECEIVING_STUDS;i++){
         struct IR_RX_stud_state  * currentStud=&studStates[i];
 
         //Prevents reading new data if the last message still needs to be processed
        // if(currentStud->newDataReady) continue;
-
-        // if(i==0) PIN_setOutputValue(&hStateHui, PIN_BUTTON, 0);
-
 
         if(currentStud->disconnectionTimeout==1){
             currentStud->disconnectionTimeout=0;
@@ -213,9 +203,7 @@ void IR_RX_DoWork()
 
         uint8_t studValue=(ReadInputBufferByte(i/8)>>(7-i)) & 0x01;
 
-        // if(i==0) PIN_setOutputValue(&hStateHui, PIN_BUTTON, studValue);
 
-        //Display_printf(dispHandle, 1, 0, "Stud value. Value: %d",studValue);
 
         if((studValue==1 && (currentStud->decoderState==RX_BIT_STATE_IDLE || currentStud->decoderState==RX_BIT_STATE_LOW))
                 || (studValue==0 && (currentStud->decoderState==RX_BIT_STATE_HIGH || currentStud->decoderState==RX_BIT_STATE_END))){
@@ -224,12 +212,10 @@ void IR_RX_DoWork()
         }else{ //Something is wrong, just reset the counter
             currentStud->debounceCount=0;
         }
-        //Display_printf(dispHandle, 1, 0, "New debounce count: %d",currentStud->debounceCount);
 
         switch(studStates[i].decoderState){
         case RX_BIT_STATE_IDLE:
         {
-            //Display_printf(dispHandle, 1, 0, "Idle state");
             if(currentStud->debounceCount>RX_DEBOUNCE_COUNT) //Already stabilized, signal start
             {
                 currentStud->decoderState=RX_BIT_STATE_HIGH;
@@ -241,7 +227,6 @@ void IR_RX_DoWork()
 
         case RX_BIT_STATE_HIGH:
         {
-            //Display_printf(dispHandle, 1, 0, "HIGH state");
             currentStud->ticksHigh+=1;
             if(studStates[i].debounceCount>RX_DEBOUNCE_COUNT) //Change to low detected
             {
@@ -255,7 +240,6 @@ void IR_RX_DoWork()
         }
         case RX_BIT_STATE_LOW:
         {
-            //Display_printf(dispHandle, 1, 0, "LOW state");
             currentStud->ticksLow+=1;
             if(currentStud->ticksLow>(currentStud->ticksHigh)*RX_MAXIMUM_HIGHLOW_TIMES_DIFFERENCE_VALID){
                 currentStud->newDataReady=true;
@@ -279,31 +263,17 @@ void IR_RX_DoWork()
                 currentStud->ticksLow=0;
 
 
-
-                //#ifdef FULL_DEBUG
-                //Display_printf(dispHandle, 1, 0, "bit: %d. High: %d Low: %d",valueDetected,currentStud->ticksHigh,currentStud->ticksLow);
-                //#endif
-
-
                 currentStud->currentByte|=valueDetected<<(7-currentStud->currentBitPosition);
                 if(currentStud->currentBitPosition>=7){ //Just wrote the last bit
                     //DO SOMETHING WITH THE NEW BYTE
-                    //#ifdef FULL_DEBUG
-                    //Display_printf(dispHandle, 1, 0, "Got byte %d",studStates[i].currentByte);
-                    //Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(studStates[i].currentByte));
-
-                    //#endif
                     currentStud->currentBitPosition=0;
 
                     if(currentStud->currentBytePosition < MSG_BUFFER_SIZE) {
                         currentStud->buffer[currentStud->currentBytePosition]=currentStud->currentByte;
-                        //Display_printf(dispHandle, 1, 0, "Got byte: %d. Value: %d",currentStud->currentBytePosition,studStates[i].currentByte);
                         currentStud->currentBytePosition++; //Clean byte after we are done
                     }
 
                     currentStud->currentByte=0; //Clean byte after we are done
-
-
                 }else{
                     currentStud->currentBitPosition++;
                 }
@@ -325,7 +295,7 @@ bool Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t leng
 
     if(length!=12) { //Check for the message length
         Display_printf(dispHandle, 1, 0, "Wrong BRICK_ID message length %d",studIndex);
-        return;
+        return false;
     }
 
     int changed=memcmp(currentStud->connectedBrickID,startOfData,6);
@@ -341,22 +311,12 @@ bool Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t leng
         long newID=0;
         int newBrickType=0, newStudID=0;
 
-        //Only for debugging
-        /*for(uint8_t * m=startOfData;m<startOfData+9;m++){
-            Display_printf(dispHandle, 1, 0, "%d ",*m);
-        }*/
-
         for(int i=0;i<6;i++){
             newID|=startOfData[i]<< ((5-i)*8);
-          //  currentStud->connectedBrickID[i]=startOfData[i];
         }
 
         newBrickType=(startOfData[6]<<16) + (startOfData[6+1]<<8)+(startOfData[6+2]);
         newStudID=(startOfData[9]<<16) + (startOfData[9+1]<<8)+(startOfData[9+2]);
-
-        //memcpy(((uint8_t *)&newID)-5,startOfData,6);
-        //memcpy(((uint8_t *)&newBrickType)-2,startOfData+6,3);
-        //memcpy(((uint8_t *)&newStudID)-2,startOfData+9,3);
 
         if(currentStud->disconnectionTimeout==0){ // Brick just placed
             Display_printf(dispHandle, 1, 0, "A new wild brick just appeared at stud %d. ID=%u, Type=%d, stud=%d",studIndex,newID,newBrickType,newStudID);
@@ -383,11 +343,6 @@ bool Message_BRICKID_Received(int studIndex, uint8_t * startOfData, uint8_t leng
 //Returns true if something changed
 bool MessageReceived(int studIndex){
     struct IR_RX_stud_state  * currentStud=&studStates[studIndex];
-
-    /* Display_printf(dispHandle, 1, 0, "EOM at %d:",studIndex);
-    for(int m=0;m<currentStud->currentBytePosition;m++){
-        Display_printf(dispHandle, 1, 0, "%d ",currentStud->buffer[m]);
-    }*/
 
     //Check header
     if(currentStud->buffer[0]!=MSG_HEADER) {
@@ -419,7 +374,7 @@ bool MessageReceived(int studIndex){
         return Message_BRICKID_Received(studIndex, currentStud->buffer+2, currentStud->lastBytePosition-3);
         break;
     default:
-        //  Display_printf(dispHandle, 1, 0, "Unknown message type at stud %d",studIndex);
+        //Display_printf(dispHandle, 1, 0, "Unknown message type at stud %d",studIndex);
         break;
     }
 
@@ -438,9 +393,6 @@ static void IR_RX(UArg arg1)
 bool CreateBLEStream(){
 
     dataStreamCurrentLength=0;
-
-    for(int i=0;i<DATASTREAM_MAX_LENGTH;i++)dataStreamOutputBuffer[i]=0;
-
 
     for(int i=0;i<NUMBER_OF_RECEIVING_STUDS;i++){
 

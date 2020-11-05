@@ -101,26 +101,20 @@ typedef struct _queueRec_
 // Returns the length of the NON_ZERO bytes
 uint8_t CompressLong(long toCompress,uint8_t * buffer)
 {
-    Display_printf(dispHandle, 1, 0, "Starting to compress: %li",toCompress);
     int buffIndex=0;
     while(toCompress>0)
     {
         //Save the first 8 bits of the number
         buffer[buffIndex]=(uint8_t)toCompress;
-        Display_printf(dispHandle, 1, 0, "Done byte: %d",(int32_t)(uint8_t)toCompress);
         //Get rid of the used bits
         toCompress=toCompress>>8;
         buffIndex++;
-
     }
-
-    Display_printf(dispHandle, 1, 0, "Compression finished with %d bytes",buffIndex);
 
     //Return the byte count
     return buffIndex;
 }
 
-uint8_t flashVNBuffer[8];
 
 uint8_t currentBrickID[6]={0,0,0,0,0,0};
 bool currentBrickIDSet=false;
