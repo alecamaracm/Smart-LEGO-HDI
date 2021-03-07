@@ -165,13 +165,13 @@ void IR_RX_Task()
                 //No need to call SetNewDataStreamBegin to disable ads bc they are already disabled (streamDataReady=false)
                 if(CreateBLEStream()){
                     SetNewDataStreamEnd(); //Enable ads
-                    Display_printf(dispHandle, 1, 0,"New BLE stream packet activated from the RX loop.");
+                   // Display_printf(dispHandle, 1, 0,"New BLE stream packet activated from the RX loop.");
                 }else{
                     //Should never get here
-                    Display_printf(dispHandle, 1, 0,"There is pending data but CreateBLEStream did not return true!");
+                //    Display_printf(dispHandle, 1, 0,"There is pending data but CreateBLEStream did not return true!");
                 }
             }else{
-                Display_printf(dispHandle, 1, 0,"New BLE stream deltas are ready but there is a pending stream!");
+                // Display_printf(dispHandle, 1, 0,"New BLE stream deltas are ready but there is a pending stream!");
             }
         }
 
@@ -418,7 +418,7 @@ bool CreateBLEStream(){
             }else{
 
                 //If the current packet won't fit in the stream anymore, just break and don´t send any more that
-                if(dataStreamCurrentLength+13 >=DATASTREAM_MAX_LENGTH) break;
+                if(dataStreamCurrentLength+16 >=DATASTREAM_MAX_LENGTH) break;
 
                 //Stud connnected or changed
                 dataStreamOutputBuffer[dataStreamCurrentLength]=BLE_DELTA_TYPE_BASIC_CONNECTED;
@@ -434,7 +434,10 @@ bool CreateBLEStream(){
                //Remote stud
                memcpy(dataStreamOutputBuffer+dataStreamCurrentLength+1+6+3, studStates[i].connectedBrickStudID, 3);
 
-               dataStreamCurrentLength+=13;
+               //Remote stud
+               memcpy(dataStreamOutputBuffer+dataStreamCurrentLength+1+6+3+3, studStates[i].connectedBrickType, 3);
+
+               dataStreamCurrentLength+=16;
             }
 
             studStates[i].bleChange=false; //We processed this stud change

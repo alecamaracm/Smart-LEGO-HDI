@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using WebSocketSharp.Server;
 
 namespace LEGO_Builder
@@ -16,16 +17,14 @@ namespace LEGO_Builder
 
         public static bool scanning = false;
 
+        public static Session mainSession;
+
         public static WebSocketServer wss;
 
         static void Main(string[] args)
         {
-            var stream = new AdvertisementTransferClass();
-            stream.dataStream =new byte[]{ 0,0,0,0,0,0,10,0,0,1,0,0,3,
-                0, 0, 0, 0, 0, 0, 12, 0, 0, 3, 0, 1, 3 };
-            stream.ParsePacket();
-            Console.Write(stream);
-    
+            mainSession = new Session();
+               
 
             wss = new WebSocketServer(SharedFunctions.BRIDGE_WS_PORT);
             wss.AddWebSocketService<WSBridgeBehavior>("/Bridge");
@@ -39,39 +38,6 @@ namespace LEGO_Builder
             }           
         }
 
-        public void DoWork()
-        {
-            //Even though we are filtering by our magic numbers on the watcher, check again
-           /* if (HelperFunctions.IsAdvertisementFromABrick(args.Advertisement) && HelperFunctions.ParseBrickDataFromAdvertisement(args.Advertisement, out BrickData brickData))
-            {
-                if (brickData.brickID == 0) //Uninitialized brick
-                {
-                    HandleUninitializedBrick(brickData);
-                }
-                if (inGameBricks.ContainsKey(brickData.brickID))
-                {
-                    inGameBricks[brickData.brickID].ProcessAdvertisementUpdate(args.Advertisement);
-                }
-                else
-                {
-                    if (scanning)
-                    { //It is not in game but we are scanning for new ones, so add it
-                        Brick newBrick = new Brick(brickData);
-                        inGameBricks.Add(brickData.brickID, newBrick);
-                    }
-                    else
-                    { // It is not in game and we are not scanning, so we can forget about this brick
-                    }
-                }
-
-                Console.WriteLine($"Got brick advertisment: " + brickData.ToString());
-            }*/
-        }
-
-        static void HandleUninitializedBrick(BrickData brickData)
-        {
-            throw new NotImplementedException();
-        }
 
         static void ProcessCommand(string command)
         {
@@ -82,6 +48,88 @@ namespace LEGO_Builder
             else if (command.Equals("stopScan"))
             {
                 StopScan();
+            } else if (command.Equals("test1"))
+            {
+                DoTest1();
+            }
+            else if (command.Equals("-test1"))
+            {
+                DoTestMinus1();
+                
+            } else if (command.Equals("stress"))
+            {
+                Stopwatch watch = new();
+                long oldMemory = GC.GetTotalMemory(true);
+                watch.Start();
+                for(int i = 0; i < 100000; i++)
+                {
+                    DoTest1();
+                    DoTestMinus1();
+                }
+                watch.Stop();
+
+                long newMemory = GC.GetTotalMemory(true);
+
+                Console.WriteLine($"100000 iterations done in {watch.ElapsedMilliseconds}. Memory delta: {newMemory-oldMemory}");
+
+            }
+        }
+
+        private static void DoTestMinus1()
+        {
+            //Basic test where a brick is directly on top of another
+            var stream = new AdvertisementTransferClass();
+            stream.brickData = new BrickData() { brickID = 1, brickType = 3001 };
+            stream.brickDeltas.Add(new BrickDelta(stream.brickData)
+            {
+                brickData = stream.brickData,
+                //destinationMAC = 2, //Not sure if we are sending this
+                deltaType = DeltaType.BasicDisconnected,
+                localStud = 0,
+                //remoteBrickType = 3001,  //Not sure if we are sending this
+                //remoteStud = 0  //Not sure if we are sending this
+            });
+            stream.brickDeltas.Add(new BrickDelta(stream.brickData)
+            {
+                brickData = stream.brickData,
+                //destinationMAC = 2,  //Not sure if we are sending this
+                deltaType = DeltaType.BasicDisconnected,
+                localStud = 1,
+                //remoteBrickType = 3001,  //Not sure if we are sending this
+                //remoteStud = 1  //Not sure if we are sending this
+            });
+            foreach (var delta in stream.brickDeltas)
+            {
+                mainSession.InputNewDelta(delta);
+            }
+        }
+
+        private static void DoTest1()
+        {
+            //Basic test where a brick is directly on top of another
+            var stream = new AdvertisementTransferClass();
+            stream.brickData = new BrickData() { brickID = 1, brickType = 3001 };
+            stream.brickDeltas.Add(new BrickDelta(stream.brickData)
+            {
+                brickData = stream.brickData,
+                destinationMAC = 2,
+                deltaType = DeltaType.BasicConnected,
+                localStud = 0,
+                remoteBrickType = 3001,
+                remoteStud = 0
+            });
+            stream.brickDeltas.Add(new BrickDelta(stream.brickData)
+            {
+                brickData = stream.brickData,
+                destinationMAC = 2,
+                deltaType = DeltaType.BasicConnected,
+                localStud = 1,
+                remoteBrickType = 3001,
+                remoteStud = 1
+            });
+            foreach (var delta in stream.brickDeltas)
+            {
+                mainSession.InputNewDelta(delta);
             }
         }
 

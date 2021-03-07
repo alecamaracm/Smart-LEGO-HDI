@@ -127,7 +127,7 @@ bool currentBrickIDSet=false;
  * @brief   Initialize a TIRTOS Clock instance.
  *
  * @param   pClock        - pointer to clock instance structure.
- * @param   clockCB       - callback function upon clock expiration.
+ * @param   clockCB    clock expiration.
  * @param   clockDuration - longevity of clock timer in milliseconds
  * @param   clockPeriod   - if set to a value other than 0, the first
  *                          expiry is determined by clockDuration.  All

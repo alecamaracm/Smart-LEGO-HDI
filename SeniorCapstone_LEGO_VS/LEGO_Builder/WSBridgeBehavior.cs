@@ -27,6 +27,10 @@ namespace LEGO_Builder
                 case SharedFunctions.BRIDGE_2_BUILDER_DATASTREAM:
                     var receivedData = JsonConvert.DeserializeObject<AdvertisementTransferClass>(e.Data.Substring(e.Data.IndexOf("|")+1));
                     receivedData.ParsePacket();
+                    foreach(var delta in receivedData.brickDeltas)
+                    {
+                        Program.mainSession.InputNewDelta(delta);
+                    } 
                     Console.WriteLine("Received stream data from bick: " + receivedData);
                     break;
                 default:

@@ -9,7 +9,7 @@ namespace SharedLib
         public BrickData brickData;
         public byte[] dataStream;
 
-        public List<BrickDelta> brickDeltas;
+        public List<BrickDelta> brickDeltas=new();
 
         public bool ParsePacket()
         {
@@ -26,14 +26,14 @@ namespace SharedLib
 
             while(dataStreamList.Count>0)
             {
-                BrickDelta delta = new BrickDelta();
-                delta.deltaType = dataStreamList[0];
+                BrickDelta delta = new BrickDelta(brickData);
+                delta.deltaType = (DeltaType)dataStreamList[0];
 
                 int deltaLength = 0;
 
                 switch(delta.deltaType)
                 {
-                    case 0: //Stud chance (Connected or replaced)
+                    case DeltaType.BasicConnected: //Stud chance (Connected or replaced)
                         var macBytes = dataStreamList.GetRange(1, 6);
                         macBytes.AddRange(new byte[] { 0x00, 0x00 }); //Padd the 6 bytes into the 8 for the long                         
                         delta.destinationMAC = BitConverter.ToInt64(macBytes.ToArray(), 0);
@@ -48,9 +48,14 @@ namespace SharedLib
                         studBytes.Reverse(); //We are sending MSByte first but this system is little endian
                         delta.remoteStud = BitConverter.ToInt32(studBytes.ToArray(), 0);
 
-                        deltaLength = 13;
+                        studBytes = dataStreamList.GetRange(13, 3);
+                        studBytes.InsertRange(0, new byte[] { 0x00 }); //Padd the 3 bytes into the 4 for the int 
+                        studBytes.Reverse(); //We are sending MSByte first but this system is little endian
+                        delta.remoteBrickType = BitConverter.ToInt32(studBytes.ToArray(), 0);
+
+                        deltaLength = 16;
                         break;
-                    case 1: //Stud disconnected
+                    case DeltaType.BasicDisconnected: //Stud disconnected
                         var studBytes2 = dataStreamList.GetRange(1, 3);
                         studBytes2.InsertRange(0, new byte[] { 0x00 }); //Padd the 3 bytes into the 4 for the int 
                         studBytes2.Reverse(); //We are sending MSByte first but this system is little endian
@@ -58,7 +63,7 @@ namespace SharedLib
 
                         deltaLength = 4;
                         break;
-                    case 2:  //Rotating stud change or add                       
+                    case DeltaType.RotatingConnected:  //Rotating stud change or add                       
                         throw new NotImplementedException("Rotation deltas not implemented yet!");
                     default:
                         throw new NotImplementedException("Unknown delta type!");
@@ -92,26 +97,40 @@ namespace SharedLib
 
     public class BrickDelta
     {
-        public byte deltaType=0xFF;
+        public DeltaType deltaType=(DeltaType)0xFF;
         public long destinationMAC;
         public int localStud;
         public int remoteStud;
+        public BrickData brickData;
+
+        public BrickDelta(BrickData owner)
+        {
+            brickData = owner;
+        }
 
         public float[] rotations;
+        public int remoteBrickType;
 
         public override string ToString()
         {
             switch (deltaType)
             {
-                case 0: //Basic stud connection
+                case DeltaType.BasicConnected: //Basic stud connection
                     return $"New basic stud connected. LocalStud={localStud}, RemoteMAC={destinationMAC.ToString("X6")}, RemoteStud={remoteStud}";
-                case 1: //Basic stud connection
+                case DeltaType.BasicDisconnected: //Basic stud connection
                     return $"Stud disconnected. LocalStud={localStud}";
-                case 2: //Rotating stud connection
+                case DeltaType.RotatingConnected: //Rotating stud connection
                     return $"Rotating stud connected.";
                 default:
                     return "Unknown brick delta!";
             }
         }
+    }
+
+    public enum DeltaType : byte
+    {
+        BasicConnected = 0,
+        BasicDisconnected = 1,
+        RotatingConnected = 2
     }
 }

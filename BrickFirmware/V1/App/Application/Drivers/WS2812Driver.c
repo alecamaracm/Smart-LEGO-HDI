@@ -74,7 +74,7 @@ int rgbStatusIntervalMultiplierCount=1000;
 bool fadeUp=true;
 
 RGB_LEDS_STATE rgbState=PARTY;
-float brigthness=0.1f;
+float brigthness=0.8f;
 
 
 
@@ -190,14 +190,14 @@ void UpdateCurrentRGBAnimation()
         RGB_LEDs_setAll(0,0,0);
         break;
     case CHARGING:
-        RGB_LEDs_setAll(255,0,0);
+        RGB_LEDs_setAll(100,0,0);
         break;
     case CHARGED:
-        RGB_LEDs_setAll(0,255,0);
+        RGB_LEDs_setAll(0,100,0);
         break;
     case PARTY:
     {
-        brigthness=0.1f;
+        /*brigthness=0.1f;
 
         bool empty=true;
         for(int i=0;i<LED_NUMBER*3;i++)
@@ -211,12 +211,14 @@ void UpdateCurrentRGBAnimation()
         {
             WSOutputData[i]= WSOutputData[i+1];
         }
-        WSOutputData[LED_NUMBER*3-1]=temp;
+        WSOutputData[LED_NUMBER*3-1]=temp;*/
+        RGB_LEDs_setAll(20,20,0);
+        brigthness=0.5f;
         break;
     }
     case BRICK_CONNECTED:
     {
-        RGB_LEDs_setAll(0,0,255);
+        RGB_LEDs_setAll(0,0,200);
         break;
     }
 
@@ -242,7 +244,7 @@ void UpdateCurrentRGBAnimation()
         if(fadeUp)
         {
             brigthness+=0.015f;
-            if(brigthness>0.35f) fadeUp=false;
+            if(brigthness>0.80f) fadeUp=false;
         }else{
             brigthness-=0.015f;
             if(brigthness<0.025f) fadeUp=true;
