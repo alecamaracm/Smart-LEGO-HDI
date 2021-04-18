@@ -40,9 +40,9 @@ static void MainLoop_taskFxn();
 
 
 
-Task_Struct spTaskML;
+/*Task_Struct spTaskML;
 #pragma DATA_ALIGN(spTaskStackML, 8)
-uint8_t spTaskStackML[512];
+uint8_t spTaskStackML[256];
 
 uint8_t counter=1;
 
@@ -53,7 +53,7 @@ void MainLoop_createTask()
   // Configure task
   Task_Params_init(&taskParams);
   taskParams.stack = spTaskStackML;
-  taskParams.stackSize = 512;
+  taskParams.stackSize = 256;
   taskParams.priority = DEFAULT_TASK_PRIORITY;
 
   Task_construct(&spTaskML, MainLoop_taskFxn, &taskParams, NULL);
@@ -98,6 +98,6 @@ static void MainLoop_taskFxn()
 
          Task_sleep(500*100);
      }
-}
+}*/
 
 

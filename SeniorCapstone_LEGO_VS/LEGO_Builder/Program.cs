@@ -3,12 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using WebSocketSharp.Server;
 
 namespace LEGO_Builder
 {
     class Program
     {
+        public const float DEG2RAD = (float)Math.PI / 180;
+        public const float RAD2DEG = 180 / (float)Math.PI;
+
+
         //Bricks actually in game (We should get their updates)
         public static Dictionary<long, Brick> inGameBricks = new Dictionary<long, Brick>();
 
@@ -41,9 +46,31 @@ namespace LEGO_Builder
 
         static void ProcessCommand(string command)
         {
+            if (command.Equals("recalculate"))
+            {
+                mainSession.SubmitChanges();
+            }
             if (command.Equals("startScan"))
             {
                 StartScan();
+            }else if (command.Equals("superTest"))
+            {
+                Random random = new Random();
+                int count =10;
+                for(int x = 0; x < count;x ++)
+                {
+                    for (int y = 0; y < count; y ++)
+                    {
+                        for (int z = 0; z < count; z ++)
+                        {
+
+                                CADAPIs.AddBlock(3001, x * 100 + y * 10 + z, "%23" + random.Next(254, 255).ToString("X") + random.Next(254, 255).ToString("X") + random.Next(254, 255).ToString("X"), new System.Numerics.Vector3(x * 80, y * 24, z * 40), new System.Numerics.Vector3(0, 0, 0));
+
+                          //   CADAPIs.RemoveBlock(x * 100 + y * 10 + z);
+                        }
+                    }
+                }
+                CADAPIs.RemoveAll();
             }
             else if (command.Equals("stopScan"))
             {
@@ -102,6 +129,7 @@ namespace LEGO_Builder
             {
                 mainSession.InputNewDelta(delta);
             }
+            mainSession.SubmitChanges();
         }
 
         private static void DoTest1()
@@ -116,21 +144,22 @@ namespace LEGO_Builder
                 deltaType = DeltaType.BasicConnected,
                 localStud = 0,
                 remoteBrickType = 3001,
-                remoteStud = 0
+                remoteStud = 4
             });
             stream.brickDeltas.Add(new BrickDelta(stream.brickData)
             {
                 brickData = stream.brickData,
                 destinationMAC = 2,
                 deltaType = DeltaType.BasicConnected,
-                localStud = 1,
+                localStud = 4,
                 remoteBrickType = 3001,
-                remoteStud = 1
+                remoteStud = 5
             });
             foreach (var delta in stream.brickDeltas)
             {
                 mainSession.InputNewDelta(delta);
             }
+            mainSession.SubmitChanges();
         }
 
         static void StopScan()

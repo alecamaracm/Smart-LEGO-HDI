@@ -13,6 +13,7 @@
 #define BRICK_TYPE 702
 #define NUMBER_OF_TRANSMITTING_STUDS 12
 #define NUMBER_OF_RECEIVING_STUDS 12
+#define LED_NUMBER 4
 //-----------------------------------
 
 

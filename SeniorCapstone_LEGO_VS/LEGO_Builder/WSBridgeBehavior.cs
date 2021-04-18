@@ -30,7 +30,8 @@ namespace LEGO_Builder
                     foreach(var delta in receivedData.brickDeltas)
                     {
                         Program.mainSession.InputNewDelta(delta);
-                    } 
+                    }
+                    Program.mainSession.ForceRecalculate();
                     Console.WriteLine("Received stream data from bick: " + receivedData);
                     break;
                 default:

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 
 namespace LEGO_Builder
 {
@@ -17,6 +18,11 @@ namespace LEGO_Builder
 
         //Bottom sutds
         public List<BrickStud> rxStuds = new();
+
+        public Vector3 position = Vector3.Zero;
+        public float rotation = 0;
+        public bool positionCalculated = false;
+
 
         public SessionBrick(BrickData _brickData, string brickDefinitionFile, Session session)
         {
@@ -33,12 +39,12 @@ namespace LEGO_Builder
                 { //Read all the txStuds
                     var line = reader.ReadLine();
                     if (line == "rxStuds") break;
-                    rxStuds.Add(parseBrickStud(line));
+                    txStuds.Add(parseBrickStud(line));
                 }
 
                 while (!reader.EndOfStream)
                 { //Read all the txStuds
-                    txStuds.Add(parseBrickStud(reader.ReadLine()));
+                    rxStuds.Add(parseBrickStud(reader.ReadLine()));
                 }
             }    
         }

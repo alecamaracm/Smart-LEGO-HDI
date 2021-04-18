@@ -10,8 +10,6 @@ namespace StudioPlugin
 {
     public class PluginLoader
     {
-        static StreamWriter logWriter;
-
         private static GameObject persistentGameObject;
         public static void Load()
         {         
@@ -33,7 +31,6 @@ namespace StudioPlugin
         {
             try
             {
-                logWriter.Close();
             }
             catch (Exception ex)
             {

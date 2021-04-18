@@ -13,6 +13,8 @@
 #define BRICK_TYPE 3001
 #define NUMBER_OF_TRANSMITTING_STUDS 8
 #define NUMBER_OF_RECEIVING_STUDS 8
+
+#define LED_NUMBER 4
 //-----------------------------------
 
 

@@ -24,5 +24,10 @@ namespace LEGO_Builder
             return connectedTo != null;
         }
 
+        public Vector3 GetWorldPosition()
+        {
+            return brick.position + Vector3.Transform(brickOffset, Matrix4x4.CreateFromYawPitchRoll(0, 0, brick.rotation * Program.DEG2RAD));
+        }
+
     }
 }

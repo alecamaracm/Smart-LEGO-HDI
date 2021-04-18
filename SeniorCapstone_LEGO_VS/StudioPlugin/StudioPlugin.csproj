@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConcurrentDictionary.cs" />
     <Compile Include="CustomBrickDataComponent.cs" />
     <Compile Include="ExtensionClasses.cs" />
     <Compile Include="ObjectDumper.cs" />

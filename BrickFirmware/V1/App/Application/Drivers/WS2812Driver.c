@@ -29,6 +29,8 @@
 
 #include "Transceivers/IR_RX.h"
 
+
+
 void SendWSUpdate();
 void RGB_LEDs_setAll(uint8_t r,uint8_t g,uint8_t b);
 void UpdateCurrentRGBAnimation();
@@ -50,7 +52,7 @@ uint8_t RGB_LEDS_ANIMS_INTERVAL_MULTIPLER[] = {
 };
 
 
-#define LED_NUMBER 2
+
 
 
 Task_Struct spTaskWS;
@@ -179,6 +181,8 @@ void UpdateCurrentRGBState(){
     default:
         break;
     }
+
+
 
 }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -13,8 +14,7 @@ namespace StudioPlugin
 {
     public class MainPluginComponent:MonoBehaviour
     {
-        Thread backgroundThread;
-        TcpListener tcpListener;
+        Thread backgroundThread;    
 
         HttpListener listener;
         int port = 6971;
@@ -29,11 +29,12 @@ namespace StudioPlugin
         }
         public void Update()
         {
+       
+
         }
         public void OnGUI()
-        {
-         
-            // Here you can call IMGUI functions of Unity to build your UI for the hack :)
+        {        
+          
         }
 
         public void OnDestroy()
@@ -47,6 +48,7 @@ namespace StudioPlugin
             {
                 listener = new HttpListener();
                 listener.Prefixes.Add("http://localhost:"+port+"/");
+                listener.Prefixes.Add("http://127.0.0.1:" + port + "/");
                 listener.Start();
             }
             catch (System.Exception)
@@ -58,74 +60,98 @@ namespace StudioPlugin
             BLStudio.Instance.onModifiedPart += PartModified;
 
             while (true)
-            {      
-                try
-                {
-                    HttpListenerContext ctx = listener.GetContext();
-
-                    HttpListenerRequest req = ctx.Request;
-                    HttpListenerResponse resp = ctx.Response;                    
-
-                    using (StreamWriter writer = new StreamWriter(resp.OutputStream))
-                    {                     
-                        switch(req.HttpMethod)
-                        {
-                            case "GET":
-                                switch (req.Url.AbsolutePath)
-                                {
-                                    case "/getBricks":
-                                        ProcessGetBricksRequest(req, resp);
-                                        break;
-                                    default:
-                                        resp.StatusCode = 404;
-                                        break;
-                                }
-                                break;
-                            case "POST":
-                                switch (req.Url.AbsolutePath)
-                                {
-                                    case "/addBrick":
-                                        ProcessAddBrickRequest(req, resp);
-                                        break;
-                                    case "/removeBrick":
-                                        ProcessRemoveBrickRequest(req, resp);
-                                        break;
-                                    default:
-                                        resp.StatusCode = 404;
-                                        break;
-                                }
-                                break;
-                            default:
-                                resp.StatusCode = 404;
-                                break;
-                        }
-
-                                        
-                        resp.Close();
-                       
-                       /*foreach(var part in BLStudio.Instance.getAllBricks())
-                        {
-                            writer.WriteLine($" - {part.PartName} - {part.ColorCode} ({part.Color.ToString()}) - pos={part.Position.ToString()}");
-                            BLStudio.Instance.changeBrickColor(part, ColorLibrary.Instance.getSimilarColorCodeForColor_RGB(new Color(1, 0, 0)));
-                        }*/
-                    }
-                   // var part= new LDrawPart("14716.dat");
-                  //  BLStudio.Instance.addBrick(part);
-                    //ObjectDumper.Write(part.ParentStep,0,new ConsoleTextWriter());
-                    //PluginLoader.Log("Done!");
-                    //GameWorld.Current.waitingPartToAddList.Add(new LDrawPart("14716.dat"));
-                   
-                }
-                catch (System.Exception ex)
-                {
-                    try
-                    {
-                        PluginLoader.Log("An error has ocurrend in the HTTPListener while loop! Error: "+ex.Message);
-                    }
-                    catch (System.Exception)   {   }
-                }
+            {
+                HttpListenerContext ctx = listener.GetContext();
+                // ListenOnce(ctx);
+                //StartCoroutine("ScketchyFix", ctx);
+                DoWorkWithListener(ctx);
                 Thread.Sleep(25);
             }
+        }
+
+        IEnumerator ScketchyFix(object arg)
+        {
+            HttpListenerContext ctx = (HttpListenerContext)arg;
+            DoWorkWithListener(ctx);
+            yield return null;
+        }
+
+        private void DoWorkWithListener(HttpListenerContext ctx)
+        {
+            try
+            {                
+
+                HttpListenerRequest req = ctx.Request;
+                HttpListenerResponse resp = ctx.Response;
+
+                using (StreamWriter writer = new StreamWriter(resp.OutputStream))
+                {
+                    switch (req.HttpMethod)
+                    {
+                        case "GET":
+                            switch (req.Url.AbsolutePath)
+                            {
+                                case "/getBricks":
+                                    ProcessGetBricksRequest(req, resp);
+                                    break;
+                                default:
+                                    resp.StatusCode = 404;
+                                    break;
+                            }
+                            break;
+                        case "POST":
+                            switch (req.Url.AbsolutePath)
+                            {
+                                case "/addBrick":
+                                    ProcessAddBrickRequest(req, resp);
+                                    break;
+                                case "/removeBrick":
+                                    ProcessRemoveBrickRequest(req, resp);
+                                    break;
+                                case "/removeAll":
+                                    ProcessRemoveAllRequest(req, resp);
+                                    break;
+                                default:
+                                    resp.StatusCode = 404;
+                                    break;
+                            }
+                            break;
+                        default:
+                            resp.StatusCode = 404;
+                            break;
+                    }
+
+
+                    resp.Close();
+                }
+
+
+            }
+            catch (System.Exception ex)
+            {
+                try
+                {
+                    PluginLoader.Log("An error has ocurrend in the HTTPListener while loop! Error: " + ex.Message);
+                }
+                catch (System.Exception) { }
+            }
+        }
+
+        private void ProcessRemoveAllRequest(HttpListenerRequest req, HttpListenerResponse resp)
+        {
+            PluginLoader.Log("Processing remove brick request...");     
+
+            int removals = 0;
+
+            foreach (var brick in customBrickData.Select(p => p.Key).ToList())
+            {
+                if (customBrickData.ContainsKey(brick)) customBrickData.Remove(brick);
+                BLStudio.Instance.removeBrick(brick);
+                removals++;
+            }
+
+            resp.StatusCode = 200;
+            resp.OutputStream.WriteString("Removed " + removals + " bricks.");
         }
 
         private void primitiveRemoved(LDrawStep step, LDrawPrimitive part)
