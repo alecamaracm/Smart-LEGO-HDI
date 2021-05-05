@@ -53,6 +53,9 @@ namespace LEGO_Builder
             if (command.Equals("startScan"))
             {
                 StartScan();
+            }else if (command.Equals("clear"))
+            {
+                mainSession = new Session(true);                
             }else if (command.Equals("superTest"))
             {
                 Random random = new Random();
@@ -136,24 +139,24 @@ namespace LEGO_Builder
         {
             //Basic test where a brick is directly on top of another
             var stream = new AdvertisementTransferClass();
-            stream.brickData = new BrickData() { brickID = 1, brickType = 3001 };
+            stream.brickData = new BrickData() { brickID = 1, brickType = 6869 };
             stream.brickDeltas.Add(new BrickDelta(stream.brickData)
             {
                 brickData = stream.brickData,
                 destinationMAC = 2,
                 deltaType = DeltaType.BasicConnected,
                 localStud = 0,
-                remoteBrickType = 3001,
-                remoteStud = 4
+                remoteBrickType = 6869,
+                remoteStud = 0
             });
             stream.brickDeltas.Add(new BrickDelta(stream.brickData)
             {
                 brickData = stream.brickData,
                 destinationMAC = 2,
                 deltaType = DeltaType.BasicConnected,
-                localStud = 4,
-                remoteBrickType = 3001,
-                remoteStud = 5
+                localStud = 1,
+                remoteBrickType = 6869,
+                remoteStud =1
             });
             foreach (var delta in stream.brickDeltas)
             {

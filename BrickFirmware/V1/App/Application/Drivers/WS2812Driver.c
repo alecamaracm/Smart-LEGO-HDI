@@ -29,6 +29,7 @@
 
 #include "Transceivers/IR_RX.h"
 
+#include "Accel.h"
 
 
 void SendWSUpdate();
@@ -68,7 +69,7 @@ uint8_t WSsendBuffer[(LED_NUMBER*3)];
 uint8_t WSOutputData[(LED_NUMBER*3)];
 
 
-#define RGB_LED_ANIMATION_INTERVAL_MS 30
+
 int animationMultiplierCount=1000;
 #define RGB_STATUS_SELECT_INTERVAL_MULTIPLIER 10
 int rgbStatusIntervalMultiplierCount=1000;
@@ -82,6 +83,8 @@ float brigthness=0.8f;
 
 void WS2812Driver_createTask()
 {
+
+
   Task_Params taskParams;
 
   // Configure task
@@ -107,7 +110,6 @@ static void WS2812Driver_taskFxn()
 
      Display_printf(dispHandle, 1, 0, "WS2812 driver initialization finished!");
 
-
      while(true){
 
          //Check if the current animation mode is correct
@@ -130,6 +132,9 @@ static void WS2812Driver_taskFxn()
 
          //Send the update to the LEDs and sleep
          SendWSUpdate();
+
+        // DoAccelWork();
+
          Task_sleep(RGB_LED_ANIMATION_INTERVAL_MS*100);
 
      }
@@ -194,10 +199,10 @@ void UpdateCurrentRGBAnimation()
         RGB_LEDs_setAll(0,0,0);
         break;
     case CHARGING:
-        RGB_LEDs_setAll(100,0,0);
+        RGB_LEDs_setAll(30,0,0);
         break;
     case CHARGED:
-        RGB_LEDs_setAll(0,100,0);
+        RGB_LEDs_setAll(0,30,0);
         break;
     case PARTY:
     {
@@ -222,7 +227,7 @@ void UpdateCurrentRGBAnimation()
     }
     case BRICK_CONNECTED:
     {
-        RGB_LEDs_setAll(0,0,200);
+        RGB_LEDs_setAll(0,0,150);
         break;
     }
 
@@ -283,4 +288,10 @@ void RGB_LEDs_setAll(uint8_t r,uint8_t g,uint8_t b)
         WSOutputData[i+1]=r;
         WSOutputData[i+2]=b;
     }
+}
+
+
+void TurnAllOff(){
+    RGB_LEDs_setAll(0,0,0);
+    SendWSUpdate();
 }

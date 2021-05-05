@@ -33,6 +33,7 @@
 #include "Drivers/inputShiftDriver.h"
 #include "GLOBAL_DEFINES.h"
 #include <ti/sysbios/knl/Clock.h>
+#include "Drivers/Accel.h"
 
 static void IR_RX();
 
@@ -157,6 +158,7 @@ void IR_RX_Task()
                 }
             }
             IR_RX_isSomethingConnected=somethingConnected;
+            ResetSleepCounter(); //Reset the sleep timeout counter because something happened
         }
 
         if(thereIsBLEPendingData && currentBrickIDSet){

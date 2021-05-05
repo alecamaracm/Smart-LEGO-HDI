@@ -13,9 +13,15 @@ namespace LEGO_Builder
         /// Currently placed somewhere, the key is the brick id
         /// </summary>
         public Dictionary<long, SessionBrick> bricks = new();
-
        
         ulong firstBrickCacheID = ulong.MaxValue;
+
+        public Dictionary<ulong,OldUpdateDataClass> dataFromLastUIUpdate=new();
+
+        public Session(bool forceClean=false)
+        {
+            if (forceClean) CADAPIs.RemoveAll();
+        }
 
         /// <summary>
         /// Process a delta in the session
@@ -36,7 +42,7 @@ namespace LEGO_Builder
                         //Makes sure that the remote brick exists in the current sessions. Otherwise it adds it
                         if (!bricks.ContainsKey(brickDelta.destinationMAC)) bricks.Add(brickDelta.destinationMAC, 
                             new SessionBrick(new BrickData() { brickID = (ulong)brickDelta.destinationMAC, brickType = (ulong)brickDelta.remoteBrickType }, 
-                            Environment.CurrentDirectory + @"\..\..\..\BrickDefinitions\" + brickDelta.brickData.brickType + ".bdf", 
+                            Environment.CurrentDirectory + @"\..\..\..\BrickDefinitions\" + brickDelta.remoteBrickType + ".bdf", 
                             this));
 
                         var rxBrick = bricks[(long)brickDelta.brickData.brickID];
@@ -107,7 +113,6 @@ namespace LEGO_Builder
 
         private void RecalculatePositions()
         {
-
             foreach (var brick in bricks) brick.Value.positionCalculated = false;
 
             var brickList = bricks.Values.ToList();
@@ -181,6 +186,10 @@ namespace LEGO_Builder
                     for (int remoteRotation = 0; remoteRotation < 360; remoteRotation += 90)
                     {
                         otherBrick.position = stud0Current.GetWorldPosition() - Vector3.Transform(stud0Current.connectedTo.brickOffset, Matrix4x4.CreateFromYawPitchRoll(0, 0, remoteRotation * Program.DEG2RAD));
+                        otherBrick.position.X = (float)Math.Round(otherBrick.position.X);
+                        otherBrick.position.Y = (float)Math.Round(otherBrick.position.Y);
+                        otherBrick.position.Z = (float)Math.Round(otherBrick.position.Z);
+
                         otherBrick.rotation = remoteRotation;
                         var guessedStud1Other = stud1Current.connectedTo.GetWorldPosition();
                         if (Math.Abs((guessedStud1Other - stud1Current.GetWorldPosition()).Length()) < 0.1)
@@ -209,13 +218,36 @@ namespace LEGO_Builder
 
         private void SendStateToCAD()
         {
-            CADAPIs.RemoveAll();
+            foreach (var oldData in dataFromLastUIUpdate) oldData.Value.usedInTheCurrentState = false;
+
             foreach(var brick in bricks)
             {
                 if (brick.Value.positionCalculated)
                 {
-                    CADAPIs.AddBlock((int)brick.Value.brickData.brickType, (long)brick.Value.brickData.brickID, "%23FFFFFF",new Vector3(brick.Value.position.X, brick.Value.position.Z, brick.Value.position.Y), new Vector3(0, brick.Value.rotation, 0));
+                    bool brickJustCreated = false;
+                    if (!dataFromLastUIUpdate.ContainsKey((ulong)brick.Key))
+                    {
+                        brickJustCreated = true;
+                        dataFromLastUIUpdate.Add((ulong)brick.Key, new OldUpdateDataClass());
+                    }
+
+                    var oldBrickData=dataFromLastUIUpdate[(ulong)brick.Key];
+
+                    if (!brick.Value.position.Equals(oldBrickData.position) || brick.Value.rotation!=oldBrickData.rotation || brickJustCreated)
+                    {
+                        oldBrickData.position = brick.Value.position;
+                        oldBrickData.rotation = brick.Value.rotation;                        
+                        CADAPIs.AddBlock((int)brick.Value.brickData.brickType, (long)brick.Value.brickData.brickID, color: BrickDataProvider.GetColorForBrick(brick.Key), new Vector3(brick.Value.position.X, brick.Value.position.Z, brick.Value.position.Y), new Vector3(0, brick.Value.rotation, 0));
+                    }
+
+                    oldBrickData.usedInTheCurrentState = true;
                 }
+            }
+
+            foreach(var blockNotAnymore in dataFromLastUIUpdate.Where(p => !p.Value.usedInTheCurrentState))
+            {
+                dataFromLastUIUpdate.Remove(blockNotAnymore.Key);
+                CADAPIs.RemoveBlock((long)blockNotAnymore.Key);
             }
         }
 
@@ -225,12 +257,23 @@ namespace LEGO_Builder
 
             if(firstBrickCacheID == ulong.MaxValue || !brickList.Any(p => p.brickData.brickID == firstBrickCacheID))
             {
-                firstBrickCacheID = brickList[0].brickData.brickID;
+                var brickSelected = brickList.FirstOrDefault(brick => brick.rxStuds.Where(p => p.connectedTo != null).Where(p => !p.connectedTo.brick.positionCalculated).GroupBy(p => p.connectedTo?.brick.brickData.brickID, p => p).Any(l => l.Count() >= 2)
+                        || brick.txStuds.Where(p => p.connectedTo != null).Where(p => !p.connectedTo.brick.positionCalculated).GroupBy(p => p.connectedTo?.brick.brickData.brickID, p => p).Any(l => l.Count() >= 2));
+                if(brickSelected == null)
+                {
+                    return null;
+                }
+                firstBrickCacheID= brickSelected.brickData.brickID;
             }
 
             return brickList.Find(p => p.brickData.brickID == firstBrickCacheID);
         }
     }
 
-
+    public class OldUpdateDataClass
+    {
+        public Vector3 position=Vector3.Zero;
+        public float rotation=0;
+        public bool usedInTheCurrentState=false;
+    }
 }

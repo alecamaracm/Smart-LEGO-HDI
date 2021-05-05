@@ -21,6 +21,8 @@
 #define PIN_I_DT 12
 #define PIN_I_CLK 11
 #define PIN_I_LOAD 13
+#define PIN_SDA 5
+#define PIN_SCL 14
 
 extern PIN_State  hStateHui;
 

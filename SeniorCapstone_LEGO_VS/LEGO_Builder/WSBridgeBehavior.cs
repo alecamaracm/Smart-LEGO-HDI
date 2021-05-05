@@ -10,6 +10,8 @@ namespace LEGO_Builder
 {
     class WSBridgeBehavior : WebSocketBehavior
     {
+        object lockingObject = new object();
+
         protected override void OnMessage(MessageEventArgs e)
         {
             if (e.IsText == false) return;          
@@ -25,13 +27,16 @@ namespace LEGO_Builder
             switch (e.Data.Split('|')[0])
             {
                 case SharedFunctions.BRIDGE_2_BUILDER_DATASTREAM:
-                    var receivedData = JsonConvert.DeserializeObject<AdvertisementTransferClass>(e.Data.Substring(e.Data.IndexOf("|")+1));
+                    var receivedData = JsonConvert.DeserializeObject<AdvertisementTransferClass>(e.Data.Substring(e.Data.IndexOf("|") + 1));
                     receivedData.ParsePacket();
-                    foreach(var delta in receivedData.brickDeltas)
-                    {
-                        Program.mainSession.InputNewDelta(delta);
+                    lock (lockingObject)
+                    {                       
+                        foreach (var delta in receivedData.brickDeltas)
+                        {
+                            Program.mainSession.InputNewDelta(delta);
+                        }
+                        Program.mainSession.ForceRecalculate();                        
                     }
-                    Program.mainSession.ForceRecalculate();
                     Console.WriteLine("Received stream data from bick: " + receivedData);
                     break;
                 default:

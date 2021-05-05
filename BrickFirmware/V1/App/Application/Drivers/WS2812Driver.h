@@ -11,4 +11,8 @@
 void WS2812Driver_createTask();
 static void WS2812Driver_taskFxn();
 
+
+
+void TurnAllOff();
+
 #endif /* APPLICATION_DRIVERS_WS2812DRIVER_H_ */

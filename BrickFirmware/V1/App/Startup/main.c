@@ -58,7 +58,7 @@
 #include <icall.h>
 #include "hal_assert.h"
 #include "bcomdef.h"
-#include "simple_peripheral.h"
+
 #ifdef PTM_MODE
 #include "npi_task.h"
 #endif // PTM_MODE
@@ -72,13 +72,16 @@
 // BLE user defined configuration
 icall_userCfg_t user0Cfg = BLE_USER_CFG;
 #endif // USE_DEFAULT_USER_CFG
+//#include "simple_peripheral.h"
+#include "Application/Drivers/WS2812Driver.h"
+//#include "Application/MainLoop.h"
+//#include "Transceivers/IR_RX.h"
+//#include "Transceivers/IR_TX.h"
 
 #include <ti/display/Display.h>
+#include "MainLoop.h"
 
-#include "Application/Drivers/WS2812Driver.h"
-#include "Application/MainLoop.h"
-#include "Transceivers/IR_RX.h"
-#include "Transceivers/IR_TX.h"
+
 
 
 #include "util.h"
@@ -152,23 +155,16 @@ int main()
 
   /* Initialize ICall module */
   ICall_init();
-
-  /* Start tasks of external images - Priority 5 */
   ICall_createRemoteTasks();
 
-
   InitializePins();
-
   dispHandle = Display_open(Display_Type_ANY, NULL);
 
-  SimplePeripheral_createTask();
-  WS2812Driver_createTask();
-  //MainLoop_createTask();
-  IR_RX_createTask();
-  IR_TX_createTask();
-
+  MainLoop_createTask();
+  //WS2812Driver_createTask();
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();
+
 
   return 0;
 }

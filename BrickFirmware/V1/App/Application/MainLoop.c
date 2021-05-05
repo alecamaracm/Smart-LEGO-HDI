@@ -32,6 +32,14 @@
 #include "Drivers/inputShiftDriver.h"
 #include "GLOBAL_DEFINES.h"
 
+#include "Application/Drivers/WS2812Driver.h"
+#include "Application/MainLoop.h"
+#include "Transceivers/IR_RX.h"
+#include "simple_peripheral.h"
+#include "Transceivers/IR_TX.h"
+
+#include "Application/Drivers/Accel.h"
+
 
 
 static void MainLoop_taskFxn();
@@ -40,11 +48,9 @@ static void MainLoop_taskFxn();
 
 
 
-/*Task_Struct spTaskML;
+Task_Struct spTaskML;
 #pragma DATA_ALIGN(spTaskStackML, 8)
-uint8_t spTaskStackML[256];
-
-uint8_t counter=1;
+uint8_t spTaskStackML[512];
 
 void MainLoop_createTask()
 {
@@ -53,7 +59,7 @@ void MainLoop_createTask()
   // Configure task
   Task_Params_init(&taskParams);
   taskParams.stack = spTaskStackML;
-  taskParams.stackSize = 256;
+  taskParams.stackSize = 512;
   taskParams.priority = DEFAULT_TASK_PRIORITY;
 
   Task_construct(&spTaskML, MainLoop_taskFxn, &taskParams, NULL);
@@ -63,41 +69,31 @@ void MainLoop_createTask()
 static void MainLoop_taskFxn()
 {
      while(true){
-   //      Display_printf(dispHandle, 1, 0, "Button status: %d",PIN_getInputValue(PIN_BUTTON));
-         if(PIN_getInputValue(PIN_BUTTON)==0){
 
-             Display_printf(dispHandle, 1, 0, "Button pushed!");
-             SetNewDataStreamBegin();
-
-             for(int i=0;i<counter;i++){
-                 dataStreamOutputBuffer[i]=counter;
-             }
-             dataStreamCurrentLength=counter;
-             counter++;
-
-             SetNewDataStreamEnd();
-
-             do{
-                 Task_sleep(500*100);
-             }while(PIN_getInputValue(PIN_BUTTON)==0);
-
+         TurnAllOff();
+         Display_printf(dispHandle, 1, 0, "RESTARTED!");
+         DoAccelSetup();
+         while(!AccelMovementPresent()){
+             Display_printf(dispHandle, 1, 0, "Accelerometer movement not detected, sleeping to save energy...");
+             Task_sleep(ACCEL_WAKEUP_CHECK_INTERVAL_MS*100);
          }
-       //  outputShiftSend();
 
-       //  counter*=2;
-       //  if(counter==0){
-       //      counter=1;
-       //  }
-       //  LoadOutputBufferByte(0,0xFF);
-       //  outputShiftSend();
-        // EnableOutputLEDs();
+         AccelMovementPresent();
 
-   //      inputShiftLoad();
-    //     uint8_t data=ReadInputBufferByte(0);
-    //     Display_printf(dispHandle, 1, 0,"Loaded data: "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(data));
+         SimplePeripheral_createTask();
+         WS2812Driver_createTask();
 
-         Task_sleep(500*100);
+         IR_RX_createTask();
+         IR_TX_createTask();
+
+         ResetSleepCounter();
+
+         while(true){
+             DoAccelWork();
+             Task_sleep(ACCEL_UPDATE_INTERVAL_MS*100);
+         }
+
      }
-}*/
+}
 
 

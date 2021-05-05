@@ -15,6 +15,8 @@ namespace LEGO_Builder
 
         public static void AddBlock(int brickTypeID, long systemID,string color,Vector3 position,Vector3 rotation,bool async=true)
         {
+            if (color.StartsWith("%23") == false) color = "%23" + color;
+
             WebClient webClient = new WebClient();
             webClient.Proxy = null;
             string response=webClient.UploadString("http://"+address+":"+port+ "/addBrick?brickTypeID="+brickTypeID+ "&systemID=" + systemID+"&color="+color+
